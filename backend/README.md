@@ -128,3 +128,31 @@ Notas
 Recuperación rápida
 -------------------
 Consulta `RECOVERY.md` en la raíz del repositorio para ver cómo volver rápidamente al checkpoint.
+
+Crossmint & Solana (Network Mode)
+---------------------------------
+
+Por defecto, los adapters corren en modo offline para estabilidad en CI. Para activar rutas de red:
+
+- Requisitos de entorno:
+  - `USE_NETWORK=true`
+  - Crossmint: `CROSSMINT_API_KEY`, opcional `CROSSMINT_BASE_URL`, `CROSSMINT_COLLECTION_ID`
+  - Solana: `SOLANA_RPC_URL` (p. ej., https://api.devnet.solana.com), opcional `SOLANA_PAYER_SECRET`
+
+Ejemplo (PowerShell):
+
+```powershell
+& ..\.venv\Scripts\Activate.ps1
+$env:USE_NETWORK = 'true'
+$env:SOLANA_RPC_URL = 'https://api.devnet.solana.com'
+$env:SOLANA_PAYER_SECRET = 'dev-only-secret'
+# Opcional Crossmint
+# $env:CROSSMINT_API_KEY = '<tu_key>'
+
+# Ejecutar solo pruebas de red (se omiten si faltan variables)
+..\.venv\Scripts\python.exe -m pytest -q tests\integration\test_integrations_network.py
+```
+
+Notas:
+- El adapter de Solana retorna una firma dummy (HMAC) en modo red y no transmite la transacción.
+- Mantén `USE_NETWORK=false` en CI para evitar flakiness.

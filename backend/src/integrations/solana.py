@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
 import os
 from dataclasses import dataclass
 from json import loads as json_loads
@@ -30,10 +31,20 @@ class SolanaClient:
         src = "|".join(parts)
         return hashlib.sha256(src.encode()).hexdigest()
 
+    def _dummy_sign(self, blockhash: str, payer_secret: str) -> str:
+        """Create a deterministic HMAC-based signature for demo purposes only.
+
+        NOTE: This is NOT a real Solana Ed25519 signature. It's an HMAC-SHA256
+        to demonstrate a signing-like operation without external libs.
+        """
+        key = (payer_secret or "").encode()
+        msg = (blockhash or "").encode()
+        return f"DUMMY_SIG_{hmac.new(key, msg, hashlib.sha256).hexdigest()[:24]}"
+
     def send_micropayment(self, to_address: str, amount_sol: float) -> dict[str, Any]:
         if not self._use_network:
             return {"signature": f"SIM_SIG_{self._det_sig(to_address, str(amount_sol))[:16]}", "amount_sol": amount_sol}
-        # Minimal placeholder network call: getLatestBlockhash to prove RPC
+        # Minimal placeholder network call: getLatestBlockhash to prove RPC, then dummy-sign
         try:
             import requests
 
@@ -50,10 +61,19 @@ class SolanaClient:
                 .get("value", {})
                 .get("blockhash")
             )
-            # We are not actually signing/sending a tx here; return a structured placeholder
-            return {"latest_blockhash": blockhash, "amount_sol": amount_sol}  # noqa: TRY300
+            signature = self._dummy_sign(blockhash or "", self.cfg.payer_secret or "")
+            # We are not actually signing/sending a tx here; prepare a structured placeholder with dummy signature
+            result: dict[str, Any] = {
+                "blockhash": blockhash,
+                "signature": signature,
+                "amount_sol": amount_sol,
+                "submitted": False,
+                "note": "Dummy-signed for demo; not broadcast.",
+            }
         except Exception as e:  # noqa: BLE001
             return {"error": "exception", "message": str(e)[:500]}
+        else:
+            return result
 
     def get_latest_blockhash(self) -> dict[str, Any]:
         """Fetch latest blockhash via RPC when network is enabled.
@@ -78,6 +98,7 @@ class SolanaClient:
                 .get("value", {})
                 .get("blockhash")
             )
-            return {"latest_blockhash": blockhash}  # noqa: TRY300
         except Exception as e:  # noqa: BLE001
             return {"error": "exception", "message": str(e)[:500]}
+        else:
+            return {"latest_blockhash": blockhash}
