@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AIP to ASD Contract",
+  "description": "Message contract for Agent de Interfaz con el Paciente to Agent de Síntesis de Datos",
+  "type": "object",
+  "properties": {
+    "message_type": {
+      "type": "string",
+      "enum": ["pain_submission"]
+    },
+    "patient_id": {
+      "type": "string",
+      "description": "Unique patient identifier"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "pain_data": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "description": {
+          "type": "string"
+        },
+        "mood": {
+          "type": "string"
+        },
+        "sleep_quality": {
+          "type": "string"
+        }
+      },
+      "required": ["level"]
+    }
+  },
+  "required": ["message_type", "patient_id", "timestamp", "pain_data"]
+}

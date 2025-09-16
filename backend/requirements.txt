@@ -1,0 +1,7 @@
+langchain
+elevenlabs
+mistralai
+streamlit
+pytest
+ruff
+jsonschema

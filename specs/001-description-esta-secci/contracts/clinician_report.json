@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cero-dolor/contracts/clinician_report.json",
+  "title": "ClinicianWeeklyReport",
+  "type": "object",
+  "required": ["patient_id", "period", "highlights", "trends", "risk_flags", "patterns_detected", "adherence_summary", "recommendations"],
+  "properties": {
+    "patient_id": { "type": "string", "minLength": 1 },
+    "period": { "type": "string", "enum": ["last_7_days", "last_14_days", "last_30_days"] },
+    "highlights": {
+      "type": "array",
+      "items": { "type": "string" },
+      "maxItems": 10
+    },
+    "trends": { "type": "string", "enum": ["improving", "stable", "worsening"] },
+    "risk_flags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "maxItems": 10
+    },
+    "patterns_detected": {
+      "type": "array",
+      "items": { "type": "string" },
+      "maxItems": 10
+    },
+    "adherence_summary": {
+      "type": "object",
+      "required": ["medication", "checkins_completed"],
+      "properties": {
+        "medication": { "type": "string", "enum": ["good", "fair", "poor", "unknown"] },
+        "checkins_completed": { "type": "integer", "minimum": 0, "maximum": 1000 }
+      },
+      "additionalProperties": false
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "maxItems": 10
+    }
+  },
+  "additionalProperties": false
+}

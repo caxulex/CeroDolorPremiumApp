@@ -1,0 +1,49 @@
+{
+  "aip": {
+    "from": "AIP",
+    "type": "pong",
+    "echo": {
+      "type": "ping",
+      "from": "custom"
+    }
+  },
+  "asd": {
+    "from": "ASD",
+    "type": "ack",
+    "insights": {
+      "patterns_detected": [
+        "placeholder"
+      ]
+    },
+    "echo": {
+      "from": "AIP",
+      "type": "pong",
+      "echo": {
+        "type": "ping",
+        "from": "custom"
+      }
+    }
+  },
+  "aiper": {
+    "from": "AIPer",
+    "type": "ack",
+    "suggestion": "Try a 5-minute guided breathing exercise.",
+    "echo": {
+      "from": "ASD",
+      "type": "ack",
+      "insights": {
+        "patterns_detected": [
+          "placeholder"
+        ]
+      },
+      "echo": {
+        "from": "AIP",
+        "type": "pong",
+        "echo": {
+          "type": "ping",
+          "from": "custom"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "patient_to_clinician.schema.json",
+  "title": "PatientToClinician",
+  "description": "Reporte del paciente hacia el agente clínico.",
+  "type": "object",
+  "required": ["message_type", "patient_id", "timestamp", "patient_report"],
+  "properties": {
+    "message_type": { "const": "patient_report", "description": "Tipo de mensaje fijo." },
+    "patient_id": { "type": "string", "minLength": 1, "description": "Identificador del paciente." },
+    "timestamp": { "type": "string", "format": "date-time", "description": "Marca de tiempo ISO-8601." },
+    "patient_report": {
+      "type": "object",
+      "required": ["pain_level", "description"],
+      "properties": {
+        "pain_level": { "type": "integer", "minimum": 0, "maximum": 10, "description": "Escala 0-10." },
+        "description": { "type": "string", "minLength": 1 },
+  "mood": { "type": "string", "enum": ["alegre", "neutral", "triste", "ansioso", "estresado"] },
+  "sleep_quality": { "type": "string", "enum": ["bueno", "regular", "irregular", "malo"] }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

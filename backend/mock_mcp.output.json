@@ -1,0 +1,141 @@
+{
+  "transcript": [
+    {
+      "send": {
+        "id": "2947f5ce-ef74-464e-87a7-0748257b5a5b",
+        "ts": 1757939554107,
+        "source": "router",
+        "target": "AIP",
+        "payload": {
+          "type": "ping",
+          "from": "mcp-router"
+        }
+      }
+    },
+    {
+      "recv": {
+        "from": "AIP",
+        "payload": {
+          "from": "AIP",
+          "type": "pong",
+          "echo": {
+            "type": "ping",
+            "from": "mcp-router"
+          }
+        }
+      }
+    },
+    {
+      "send": {
+        "id": "53d5241b-0236-4b0e-a467-c57eb2fe3fc7",
+        "ts": 1757939554270,
+        "source": "AIP",
+        "target": "ASD",
+        "payload": {
+          "from": "AIP",
+          "type": "pong",
+          "echo": {
+            "type": "ping",
+            "from": "mcp-router"
+          }
+        }
+      }
+    },
+    {
+      "recv": {
+        "from": "ASD",
+        "payload": {
+          "from": "ASD",
+          "type": "ack",
+          "insights": {
+            "patterns_detected": [
+              "placeholder"
+            ]
+          },
+          "echo": {
+            "from": "AIP",
+            "type": "pong",
+            "echo": {
+              "type": "ping",
+              "from": "mcp-router"
+            }
+          }
+        }
+      }
+    },
+    {
+      "send": {
+        "id": "7676124c-b0b4-4dea-98ad-6e178daa8b63",
+        "ts": 1757939554421,
+        "source": "ASD",
+        "target": "AIPer",
+        "payload": {
+          "from": "ASD",
+          "type": "ack",
+          "insights": {
+            "patterns_detected": [
+              "placeholder"
+            ]
+          },
+          "echo": {
+            "from": "AIP",
+            "type": "pong",
+            "echo": {
+              "type": "ping",
+              "from": "mcp-router"
+            }
+          }
+        }
+      }
+    },
+    {
+      "recv": {
+        "from": "AIPer",
+        "payload": {
+          "from": "AIPer",
+          "type": "ack",
+          "suggestion": "Try a 5-minute guided breathing exercise.",
+          "echo": {
+            "from": "ASD",
+            "type": "ack",
+            "insights": {
+              "patterns_detected": [
+                "placeholder"
+              ]
+            },
+            "echo": {
+              "from": "AIP",
+              "type": "pong",
+              "echo": {
+                "type": "ping",
+                "from": "mcp-router"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "final": {
+    "from": "AIPer",
+    "type": "ack",
+    "suggestion": "Try a 5-minute guided breathing exercise.",
+    "echo": {
+      "from": "ASD",
+      "type": "ack",
+      "insights": {
+        "patterns_detected": [
+          "placeholder"
+        ]
+      },
+      "echo": {
+        "from": "AIP",
+        "type": "pong",
+        "echo": {
+          "type": "ping",
+          "from": "mcp-router"
+        }
+      }
+    }
+  }
+}

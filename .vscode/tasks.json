@@ -1,0 +1,331 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "lint-and-test",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"cd backend; python -m ruff check ..; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; pytest -q .."
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "lint-and-test",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "install-backend-deps",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pip install -r backend/requirements.txt"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "lint-and-test-venv",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "lint-and-test-venv",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "lint-and-test-venv",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "lint-and-test-venv",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "lint-and-test-venv",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "lint-and-test-venv",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check backend frontend tests --fix; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "lint-and-test-venv",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Lint and test backend",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp/backend; python -m ruff check .; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Lint and test backend",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp/backend; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check .; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Lint and test backend (venv)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp/backend; & C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check .; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Lint and test backend (venv)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp/backend; & C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m ruff check .; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & C:/Users/caxul/CeroDolorPreminumApp/.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Lint and test (venv) after wiring",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp; & ./.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & ./.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Re-run lint and tests (venv)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp; & ./.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & ./.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Re-run lint and tests (venv) 2",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp; & ./.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & ./.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Re-run lint and tests (venv) 3",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp; & ./.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & ./.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Re-run lint and tests (venv) 4",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp; & ./.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & ./.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Lint and test Web3 additions",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp; & ./.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & ./.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Final lint and tests for Web3",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp; & ./.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & ./.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Final lint and tests for Web3 (retry)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoLogo",
+				"-NoProfile",
+				"-Command",
+				"cd c:/Users/caxul/CeroDolorPreminumApp; & ./.venv/Scripts/python.exe -m ruff check backend frontend tests; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & ./.venv/Scripts/python.exe -m pytest -q"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		}
+	]
+}

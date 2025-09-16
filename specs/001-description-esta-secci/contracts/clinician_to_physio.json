@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "clinician_to_physio.schema.json",
+  "title": "ClinicianToPhysio",
+  "description": "Solicitud clínica del agente clínico hacia el agente fisioterapeuta.",
+  "type": "object",
+  "required": ["message_type", "patient_id", "timestamp", "clinical_request"],
+  "properties": {
+    "message_type": { "const": "clinical_request" },
+    "patient_id": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "clinical_request": {
+      "type": "object",
+      "required": ["goal"],
+      "properties": {
+  "goal": { "type": "string", "enum": ["reduce_pain", "increase_mobility", "reduce_pain_and_increase_mobility"] },
+        "constraints": { "type": "array", "items": { "type": "string" } },
+        "insights": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

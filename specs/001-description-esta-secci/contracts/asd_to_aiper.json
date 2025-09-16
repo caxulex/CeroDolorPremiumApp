@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ASD to AIPer Contract",
+  "description": "Insights from Agent de Síntesis de Datos to Agent de Intervención Personalizada",
+  "type": "object",
+  "properties": {
+    "message_type": {
+      "type": "string",
+      "enum": ["insights"]
+    },
+    "patient_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "insights": {
+      "type": "object",
+      "properties": {
+        "patterns_detected": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trend_analysis": {
+          "type": "string"
+        },
+        "risk_flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["patterns_detected"]
+    }
+  },
+  "required": ["message_type", "patient_id", "timestamp", "insights"]
+}

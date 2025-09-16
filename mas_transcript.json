@@ -1,0 +1,165 @@
+{
+  "validation": {
+    "patient_to_clinician": {
+      "ok": false,
+      "error": "'desconocido' is not one of ['bueno', 'regular', 'irregular', 'malo']"
+    },
+    "clinician_to_physio": {
+      "ok": true,
+      "error": null
+    },
+    "physio_to_patient": {
+      "ok": true,
+      "error": null
+    }
+  },
+  "patient": {
+    "message_type": "patient_report",
+    "patient_id": "demo_patient",
+    "timestamp": "2025-09-16T14:37:49.799819+00:00",
+    "patient_report": {
+      "pain_level": 5,
+      "description": "placeholder",
+      "mood": "neutral",
+      "sleep_quality": "desconocido"
+    }
+  },
+  "clinician": {
+    "message_type": "clinical_request",
+    "patient_id": "demo_patient",
+    "timestamp": "2025-09-16T14:37:49.799819+00:00",
+    "clinical_request": {
+      "goal": "reduce_pain_and_increase_mobility",
+      "constraints": [
+        "avoid_overexertion",
+        "pain_level<= 5"
+      ],
+      "insights": [
+        "daytime_pain_spikes",
+        "sleep_variability"
+      ]
+    }
+  },
+  "physio": {
+    "message_type": "exercise_plan",
+    "patient_id": "demo_patient",
+    "timestamp": "2025-09-16T14:37:49.799819+00:00",
+    "exercise_plan": {
+      "items": [
+        {
+          "name": "gentle_stretching",
+          "repetitions": 5,
+          "frequency_per_day": 2,
+          "notes": "slow, controlled"
+        },
+        {
+          "name": "short_walk",
+          "repetitions": 1,
+          "frequency_per_day": 1,
+          "notes": "5-10 minutes"
+        }
+      ]
+    }
+  },
+  "mcp_transcript": [
+    {
+      "label": "patient",
+      "ts": "2025-09-16T14:37:49.807867+00:00",
+      "duration_ms": 7,
+      "validation": {
+        "ok": false,
+        "error": "'desconocido' is not one of ['bueno', 'regular', 'irregular', 'malo']"
+      },
+      "post": {
+        "status": 200,
+        "json": {
+          "ok": true,
+          "received": {
+            "message_type": "patient_report",
+            "patient_id": "demo_patient",
+            "timestamp": "2025-09-16T14:37:49.799819+00:00",
+            "patient_report": {
+              "pain_level": 5,
+              "description": "placeholder",
+              "mood": "neutral",
+              "sleep_quality": "desconocido"
+            }
+          }
+        }
+      },
+      "health_path": "/health",
+      "echo_path": "/echo"
+    },
+    {
+      "label": "clinician",
+      "ts": "2025-09-16T14:37:49.810058+00:00",
+      "duration_ms": 1,
+      "validation": {
+        "ok": true,
+        "error": null
+      },
+      "post": {
+        "status": 200,
+        "json": {
+          "ok": true,
+          "received": {
+            "message_type": "clinical_request",
+            "patient_id": "demo_patient",
+            "timestamp": "2025-09-16T14:37:49.799819+00:00",
+            "clinical_request": {
+              "goal": "reduce_pain_and_increase_mobility",
+              "constraints": [
+                "avoid_overexertion",
+                "pain_level<= 5"
+              ],
+              "insights": [
+                "daytime_pain_spikes",
+                "sleep_variability"
+              ]
+            }
+          }
+        }
+      },
+      "health_path": "/health",
+      "echo_path": "/echo"
+    },
+    {
+      "label": "physio",
+      "ts": "2025-09-16T14:37:49.812055+00:00",
+      "duration_ms": 1,
+      "validation": {
+        "ok": true,
+        "error": null
+      },
+      "post": {
+        "status": 200,
+        "json": {
+          "ok": true,
+          "received": {
+            "message_type": "exercise_plan",
+            "patient_id": "demo_patient",
+            "timestamp": "2025-09-16T14:37:49.799819+00:00",
+            "exercise_plan": {
+              "items": [
+                {
+                  "name": "gentle_stretching",
+                  "repetitions": 5,
+                  "frequency_per_day": 2,
+                  "notes": "slow, controlled"
+                },
+                {
+                  "name": "short_walk",
+                  "repetitions": 1,
+                  "frequency_per_day": 1,
+                  "notes": "5-10 minutes"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "health_path": "/health",
+      "echo_path": "/echo"
+    }
+  ]
+}

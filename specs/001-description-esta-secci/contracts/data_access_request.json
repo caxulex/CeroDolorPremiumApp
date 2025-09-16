@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DataAccessRequest",
+  "type": "object",
+  "required": ["study_id", "requester", "data_types", "purpose"],
+  "properties": {
+    "study_id": {"type": "string", "minLength": 1},
+    "requester": {"type": "string", "minLength": 1},
+    "data_types": {
+      "type": "array",
+      "items": {"type": "string", "enum": ["pain_logs", "mood_sleep", "activity", "demographics"]},
+      "minItems": 1
+    },
+    "purpose": {"type": "string", "minLength": 5},
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "min_age": {"type": "integer", "minimum": 18},
+        "max_age": {"type": "integer", "maximum": 120}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

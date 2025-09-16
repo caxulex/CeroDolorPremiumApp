@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cero-dolor/contracts/anonymized_data_bundle.json",
+  "title": "AnonymizedDataBundle",
+  "type": "object",
+  "required": ["bundle_id", "fields", "data"],
+  "properties": {
+    "bundle_id": { "type": "string", "minLength": 8 },
+    "fields": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["activity", "sleep", "pain_summaries"] },
+      "minItems": 1,
+      "maxItems": 10,
+      "uniqueItems": true
+    },
+    "data": { "type": "object" }
+  },
+  "additionalProperties": false
+}

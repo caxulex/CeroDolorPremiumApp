@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ConsentGrant",
+  "type": "object",
+  "required": ["patient_id", "token_id", "researcher", "payment_amount_sol"],
+  "properties": {
+    "patient_id": {"type": "string", "minLength": 1},
+    "token_id": {"type": "string", "minLength": 3},
+    "researcher": {"type": "string", "minLength": 1},
+    "payment_amount_sol": {"type": "number", "minimum": 0.000001}
+  },
+  "additionalProperties": false
+}
