@@ -24,3 +24,6 @@ class Agent:
 
     def get(self, key: str, default: Any | None = None) -> Any | None:
         return self.state.get(key, default)
+
+    def __repr__(self) -> str:  # pragma: no cover - simple repr
+        return f"Agent(type={self.type}, state_keys={list(self.state.keys())})"
