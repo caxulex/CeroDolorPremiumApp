@@ -1,0 +1,11 @@
+[submodule "external/coral-agents-examples"]
+	path = external/coral-agents-examples
+	url = https://github.com/lastmile-ai/mcp-agent.git
+
+[submodule "external/coral-server"]
+	path = external/coral-server
+	url = https://github.com/modelcontextprotocol/servers.git
+
+[submodule "external/coral-studio"]
+	path = external/coral-studio
+	url = https://github.com/modelcontextprotocol/inspector.git

@@ -1,0 +1,22 @@
+# OS and tooling
+.DS_Store
+Thumbs.db
+
+# Python
+.venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+
+# Archives and large artifacts
+checkpoints/*.zip
+*.zip
+*.log
+*.tmp
+
+# VS Code
+.vscode/
