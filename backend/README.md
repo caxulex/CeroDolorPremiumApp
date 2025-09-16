@@ -124,3 +124,7 @@ Contratos y flujo offline-first para AI↔AP con billetera de datos y micropagos
 
 Notas
 - `USE_ADAPTERS=true` habilita Crossmint/Solana offline; `USE_NETWORK=true` intentará llamadas reales si configuras claves/URLs.
+
+Recuperación rápida
+-------------------
+Consulta `RECOVERY.md` en la raíz del repositorio para ver cómo volver rápidamente al checkpoint.
