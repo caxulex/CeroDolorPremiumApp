@@ -1,5 +1,227 @@
 # Tasks: Agente de Empatía Crónica
 
+Input: Design documents from `C:/Users/caxul/CeroDolorPreminumApp/specs/001-description-esta-secci/`
+Prerequisites: `plan.md` (required), `research.md`, `data-model.md`, `contracts/`, `quickstart.md`
+
+Feature Directory: `C:/Users/caxul/CeroDolorPreminumApp/specs/001-description-esta-secci`
+
+## Execution Flow (main)
+```
+1. Load plan.md and extract stack, structure, and constraints
+2. Load optional design docs: data-model.md, contracts/, research.md, quickstart.md
+3. Generate tasks by category and mark [P] for parallel where safe
+4. Enforce TDD ordering: tests before implementation
+5. Number tasks T001..Txxx; include file paths and dependency notes
+6. Provide parallel execution examples with actual commands
+```
+
+Path conventions used (web app): `backend/src/`, `frontend/`, and `tests/` at repo root.
+
+---
+
+## Phase 3.1: Setup
+T001 Configure linting and testing runners [backend/.]  
+• Files: `pyproject.toml` or Ruff config already present; keep `pytest.ini` as is  
+• Commands:  
+```pwsh
+& .\.venv\Scripts\Activate.ps1
+.\.venv\Scripts\python.exe -m ruff check backend
+.\.venv\Scripts\python.exe -m pytest -q
+```
+
+T002 [P] Add base logging config for backend  
+• File: `backend/src/logging_config.py`  
+• Purpose: centralize structured logging, INFO default, DEBUG via env  
+• Dependency: none
+
+T003 [P] Verify MCP echo utilities available  
+• Scripts: `scripts/run_echo_server.ps1`, `scripts/run_mcp_client.ps1`  
+• Purpose: ensure local MCP echo path for integration tests  
+• Dependency: none
+
+---
+
+## Phase 3.2: Tests First (TDD) — MUST COMPLETE BEFORE 3.3
+For each contract JSON schema in `contracts/`, create a contract test that loads the schema and validates a representative payload.
+
+Contracts directory: `C:/Users/caxul/CeroDolorPreminumApp/specs/001-description-esta-secci/contracts/`
+
+T004 [P] Contract test for `aip_to_asd.json`  
+• File: `tests/contracts/test_aip_to_asd.py`  
+• Validate request/response shape against schema
+
+T005 [P] Contract test for `asd_to_aiper.json`  
+• File: `tests/contracts/test_asd_to_aiper.py`
+
+T006 [P] Contract test for `patient_to_clinician.json`  
+• File: `tests/contracts/test_patient_to_clinician.py`
+
+T007 [P] Contract test for `clinician_to_physio.json`  
+• File: `tests/contracts/test_clinician_to_physio.py`
+
+T008 [P] Contract test for `physio_to_patient.json`  
+• File: `tests/contracts/test_physio_to_patient.py`
+
+T009 [P] Contract test for `clinician_report.json` (AIC)  
+• File: `tests/contracts/test_clinician_report.py`
+
+T010 [P] Contract test for `research_query.json`  
+• File: `tests/contracts/test_research_query.py`
+
+T011 [P] Contract test for `data_offer.json`  
+• File: `tests/contracts/test_data_offer.py`
+
+T012 [P] Contract test for `anonymized_data_bundle.json`  
+• File: `tests/contracts/test_anonymized_data_bundle.py`
+
+T013 [P] Contract test for `micropayment_receipt.json`  
+• File: `tests/contracts/test_micropayment_receipt.py`
+
+T014 [P] Contract test for `audit_log_entry.json`  
+• File: `tests/contracts/test_audit_log_entry.py`
+
+T015 [P] Contract test for `data_access_request.json`  
+• File: `tests/contracts/test_data_access_request.py`
+
+T016 [P] Contract test for `consent_grant.json`  
+• File: `tests/contracts/test_consent_grant.py`
+
+User stories → integration tests (derive from `quickstart.md`):
+
+T017 Daily check-in flow integration test  
+• File: `tests/integration/test_daily_checkin_flow.py`  
+• Scope: AIP → ASD → AIPer transcript and validations; offline by default  
+• Dependency: `scripts/run_backend_demo.ps1` or router entrypoint
+
+T018 Weekly clinician summary integration test  
+• File: `tests/integration/test_weekly_clinician_summary.py`  
+• Scope: `--include-aic` path in router; validate schema and enrichment  
+• Dependency: AIC schema/validator present
+
+T019 [P] Env-guarded network probe tests (adapters)  
+• File: `tests/integration/test_integrations_network.py`  
+• Skip unless `USE_NETWORK=true`; probe Crossmint/Solana paths  
+• Dependency: none
+
+---
+
+## Phase 3.3: Core Implementation (ONLY after tests are failing)
+Data model entities from `data-model.md` → Pydantic models and adapters.
+
+T020 [P] Model: Patient  
+• File: `backend/src/models/patient.py`  
+• Fields: `id: str`, `name: str`, `pain_history: list[PainRecord]`
+
+T021 [P] Model: PainRecord  
+• File: `backend/src/models/pain_record.py`  
+• Fields: `date: datetime`, `pain_level: int`, `description?: str`, `mood?: str`, `sleep?: str`
+
+T022 [P] Model: Clinician  
+• File: `backend/src/models/clinician.py`  
+• Fields: `id: str`, `name: str`, `patients: list[str]`
+
+T023 [P] Model: Agent  
+• File: `backend/src/models/agent.py`  
+• Fields: `type: Literal['AIP','ASD','AIPer','AIC']`, `state: dict | None`
+
+T024 Service wiring: Ensure AIP/ASD/AIPer use models where applicable  
+• Files: `backend/src/services/aip_service.py`, `asd_service.py`, `aiper_service.py`  
+• Replace ad-hoc dicts with models for internal data shapes
+
+T025 Router: Strict contract mapping and validation  
+• File: `backend/src/agents/router.py`  
+• Ensure each hop validates input/output against `contracts/` schemas; include per-hop timings
+
+T026 AIC generation & schema validation  
+• Files: `backend/src/services/aic_service.py`, `backend/src/mcp/validation.py`  
+• Validate against `clinician_report.json`; attach MAS timings to highlights
+
+---
+
+## Phase 3.4: Integration
+T027 [P] MCP client/server echo flow validation  
+• Files: `backend/src/mcp/client.py`, `backend/src/mcp/echo_server.py`  
+• Ensure health/echo paths and transcript capture
+
+T028 Adapter gating and network toggles  
+• Files: `backend/src/integrations/*.py`  
+• Enforce `USE_ADAPTERS` and `USE_NETWORK` flags; deterministic offline fallbacks
+
+T029 [P] Web3 data wallet offline flow  
+• File: `backend/src/services/research_network_service.py`  
+• Ensure Crossmint/Solana adapters are used when env flags set; write audit JSONL
+
+---
+
+## Phase 3.5: Polish
+T030 [P] Unit tests for models and validators  
+• File: `tests/unit/test_models_validation.py`
+
+T031 [P] Performance smoke (latency < 3s)  
+• File: `tests/perf/test_latency_budget.py`  
+• Measure end-to-end local router cycle with small payload
+
+T032 [P] Docs: Update backend/README.md and RECOVERY.md  
+• Files: `backend/README.md`, `RECOVERY.md`
+
+T033 [P] Scripts: One-command demo launcher  
+• File: `scripts/run_e2e_backend.ps1`  
+• Purpose: set env flags for offline run, invoke router, save outputs
+
+---
+
+## Dependencies
+- Phase 3.2 (T004–T019) tests must be authored before Phase 3.3 implementation tasks (T020–T026)
+- Models (T020–T023) before service/adapter wiring (T024–T026)
+- MCP and adapters (T027–T029) after core router/services (T024–T026)
+- Polish (T030–T033) only after prior phases
+
+---
+
+## Parallel Execution Examples
+The following [P] tasks can run concurrently in separate terminals (different files, no conflicts):
+
+- Contract tests (T004–T016) — run in parallel
+  ```pwsh
+  # Terminal A
+  .\.venv\Scripts\python.exe -m pytest -q tests\contracts\test_aip_to_asd.py
+  # Terminal B
+  .\.venv\Scripts\python.exe -m pytest -q tests\contracts\test_asd_to_aiper.py
+  # Terminal C
+  .\.venv\Scripts\python.exe -m pytest -q tests\contracts\test_clinician_report.py
+  ```
+
+- Model stubs (T020–T023) — implement in parallel
+  ```pwsh
+  # Example creation commands (touch files)
+  ni backend/src/models/patient.py -Force | Out-Null
+  ni backend/src/models/pain_record.py -Force | Out-Null
+  ni backend/src/models/clinician.py -Force | Out-Null
+  ni backend/src/models/agent.py -Force | Out-Null
+  ```
+
+- Adapter/network probes (T019, T028–T029)
+  ```pwsh
+  $env:USE_NETWORK = 'true'
+  $env:SOLANA_RPC_URL = 'https://api.devnet.solana.com'
+  $env:SOLANA_PAYER_SECRET = 'dev-only-secret'
+  .\.venv\Scripts\python.exe -m pytest -q tests\integration\test_integrations_network.py
+  ```
+
+---
+
+## Validation Checklist
+- [ ] All contracts have corresponding tests (T004–T016)
+- [ ] All entities have model tasks (T020–T023)
+- [ ] Tests precede implementation (TDD enforced)
+- [ ] [P] tasks operate on different files (safe parallelism)
+- [ ] Each task lists exact file paths
+
+---
+
+Generated from available design artifacts and repository structure on 2025-09-16.
+# Tasks: Agente de Empatía Crónica
+
 **Input**: Design documents from `/specs/001-description-esta-secci/`
 **Prerequisites**: plan.md (required), research.md, data-model.md, contracts/
 
