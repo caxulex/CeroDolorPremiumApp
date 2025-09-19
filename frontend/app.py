@@ -328,6 +328,13 @@ except Exception:
     # If session state is not ready yet, it will be created by the factory later
     pass
 
+def _get_or_create_audio_proc_vc() -> AudioBufferProcessor:
+    ap = st.session_state.get("audio_proc_vc")
+    if not isinstance(ap, AudioBufferProcessor):
+        ap = AudioBufferProcessor()
+        st.session_state.audio_proc_vc = ap
+    return ap
+
 def _get_el_client() -> Any | None:
     """Singleton-ish ElevenLabs client (real network only if env allows)."""
     if ElevenLabsClient is None:
@@ -345,8 +352,14 @@ def _el_transcribe_bytes(audio_bytes: bytes, *, language: str = "es") -> str:
         return ""
     try:
         res = client.transcribe(audio_bytes, language=language)
-        if isinstance(res, dict) and isinstance(res.get("text"), str):
-            return str(res.get("text"))
+        # Accept various shapes: dict with 'text' or 'transcript', plain string
+        if isinstance(res, dict):
+            if isinstance(res.get("text"), str):
+                return str(res.get("text"))
+            if isinstance(res.get("transcript"), str):
+                return str(res.get("transcript"))
+        if isinstance(res, str):
+            return res
     except Exception:  # noqa: BLE001
         pass
     return ""
@@ -360,16 +373,55 @@ def _el_synthesize_text(text: str, *, voice_id: str | None = None, language: str
     _apply_saved_prefs(st.session_state.get("patient_id", "demo_patient"))
     try:
         res = client.synthesize(text, voice_id=voice_id, language=language)
-        # Prefer audio_b64 if present
-        if isinstance(res, dict) and isinstance(res.get("audio_b64"), str):
+        # Accept bytes directly
+        if isinstance(res, (bytes, bytearray)):
+            return bytes(res)
+        # Accept dict with base64 payloads in various keys
+        if isinstance(res, dict):
+            for k in ("audio_b64", "audioBase64", "audio"):
+                v = res.get(k)
+                if isinstance(v, str):
+                    try:
+                        return base64.b64decode(v)
+                    except Exception:
+                        continue
+        # Accept plain base64 string
+        if isinstance(res, str):
             try:
-                return base64.b64decode(res.get("audio_b64") or "")
-            except Exception:  # noqa: BLE001
+                return base64.b64decode(res)
+            except Exception:
                 return b""
-        # Offline simulation case returns a marker string; no playable audio
+        # Unknown shape
         return b""
     except Exception:  # noqa: BLE001
         return b""
+
+def _soft_wav_fallback(message: str = "") -> bytes:
+    """Generate a short, pleasant WAV tone locally (16kHz, 16-bit mono).
+
+    This is a last-resort fallback so that the UI can always play some audio
+    confirming the path works, even if ElevenLabs or imports fail.
+    """
+    import math, struct, io, wave
+    sr = 16000
+    dur = 1.5
+    f1, f2 = 440.0, 660.0
+    attack, decay = 0.08, 0.2
+    n = int(sr * dur)
+    buf = io.BytesIO()
+    with wave.open(buf, "wb") as wf:
+        wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(sr)
+        for i in range(n):
+            t = i / sr
+            env = 1.0
+            if t < attack:
+                env = t / attack
+            elif t > dur - decay:
+                env = max(0.0, (dur - t) / decay)
+            s = 0.5*math.sin(2*math.pi*f1*t) + 0.5*math.sin(2*math.pi*f2*t)
+            val = int(max(-1.0, min(1.0, s*env)) * 32767)
+            wf.writeframes(struct.pack('<h', val))
+    return buf.getvalue()
 
 def _store_patient_context(patient_id: str, pain_level: int, pain_desc: str, mood: str, sleep: str) -> None:
     st.session_state["patient_id"] = patient_id
@@ -653,6 +705,37 @@ with TAB_CHEQUEO:
                 "ElevenLabs Voice ID (opcional)", value=st.session_state.get("pref_el_voice", ""),
                 help="Si se deja vacío usará el valor del entorno ELEVENLABS_TTS_VOICE_ID o el default de la API."
             )
+            # Warn if user pasted an API key in the Voice ID field
+            try:
+                _maybe_key = str(st.session_state.get("pref_el_voice") or "")
+                if _maybe_key.startswith("sk_"):
+                    st.warning(
+                        "Parece que pegaste una API key en el campo de Voice ID. "
+                        "Guarda la API key en Secrets (ELEVENLABS_API_KEY) y deja este campo vacío "
+                        "o coloca un Voice ID válido (no empieza con 'sk_').",
+                        icon="⚠️",
+                    )
+            except Exception:
+                pass
+            col_el_a, col_el_b = st.columns([1,1])
+            if col_el_a.button("Probar ElevenLabs"):
+                # Try a short TTS and quick health check
+                test_text = "Prueba de conexión con ElevenLabs."
+                audio_bytes = _el_synthesize_text(test_text, voice_id=(st.session_state.get("pref_el_voice") or None))
+                if not audio_bytes:
+                    # As a last resort, play a local WAV so users can confirm audio path works
+                    audio_bytes = _soft_wav_fallback()
+                    st.warning("No se recibió audio de ElevenLabs. Reproduciendo audio local de prueba.")
+                st.audio(audio_bytes, format=("audio/mpeg" if not audio_bytes.startswith(b"RIFF") else "audio/wav"))
+                if audio_bytes and audio_bytes.startswith(b"RIFF"):
+                    st.success("Ruta de audio OK.")
+            # Hint current env
+            env_info = {
+                "USE_NETWORK": os.getenv("USE_NETWORK"),
+                "ELEVENLABS_API_KEY": ("set" if os.getenv("ELEVENLABS_API_KEY") else "missing"),
+                "ELEVENLABS_TTS_VOICE_ID": (os.getenv("ELEVENLABS_TTS_VOICE_ID") or "-"),
+            }
+            col_el_b.json(env_info)
         # Mistral preferences
         st.session_state.pref_use_mistral = st.checkbox(
             "Usar Mistral para sugerencias (requiere MISTRAL_API_KEY y USE_NETWORK=true)",
@@ -695,7 +778,7 @@ with TAB_CHEQUEO:
                     from backend.src.services.aip_service import tts_generate_bytes  # type: ignore
                     audio_demo = tts_generate_bytes(demo_text, st.session_state.get("pref_voice")) or b""
                 except Exception:  # noqa: BLE001
-                    audio_demo = b""
+                    audio_demo = _soft_wav_fallback(demo_text)
             if audio_demo:
                 st.audio(audio_demo, format=audio_demo_mime)
                 _toast("Reproduciendo prueba de voz")
@@ -865,6 +948,208 @@ with TAB_CHEQUEO:
                         st.write(f"- {ga.get('q')}\n  → {ga.get('a')}")
         # Ensamblar texto de guía dentro de la descripción si procede durante Procesar
 
+    # ---------------- Conversación guiada por voz (ElevenLabs) ----------------
+    with st.expander("🗣️ Conversación guiada por voz (ElevenLabs)", expanded=False):
+        st.caption("El agente te hará preguntas por voz y escuchará tus respuestas para completar el chequeo.")
+
+        # State machine for voice convo
+        if "vc_state" not in st.session_state:
+            st.session_state.vc_state = {
+                "stage": "ask_pain",
+                "data": {"pain_level": None, "pain_desc": "", "mood": "", "sleep": ""},
+                "last_answer": "",
+                "last_prompt": "",
+            }
+
+        vc = st.session_state.vc_state
+
+        def _speak(text: str) -> None:
+            audio_bytes = b""; audio_mime = "audio/wav"
+            if bool(st.session_state.get("pref_el")):
+                a = _el_synthesize_text(text, voice_id=(st.session_state.get("pref_el_voice") or None))
+                if a:
+                    audio_bytes = a
+                    audio_mime = "audio/mpeg" if not a.startswith(b"RIFF") else "audio/wav"
+            if not audio_bytes:
+                try:
+                    from backend.src.services.aip_service import tts_generate_bytes  # type: ignore
+                    audio_bytes = tts_generate_bytes(text, st.session_state.get("pref_voice")) or b""
+                except Exception:
+                    audio_bytes = b""
+            if audio_bytes:
+                st.audio(audio_bytes, format=audio_mime)
+
+        def _prompt_for(stage: str) -> str:
+            if stage == "ask_pain":
+                return "En una escala del uno al diez, ¿cuál es tu nivel de dolor ahora mismo?"
+            if stage == "ask_desc":
+                return "Descríbeme brevemente tu dolor o cambios notables hoy."
+            if stage == "ask_mood":
+                return "¿Cómo te sientes de ánimo hoy?"
+            if stage == "ask_sleep":
+                return "¿Cómo fue tu sueño anoche?"
+            return "Gracias. Voy a preparar una recomendación para ti."
+
+        def _parse_pain_level(text_in: str) -> int | None:
+            import re as _re
+            # extract first number 1..10
+            m = _re.search(r"\b(10|[1-9])\b", text_in)
+            if m:
+                try:
+                    val = int(m.group(1))
+                    if 1 <= val <= 10:
+                        return val
+                except Exception:
+                    pass
+            return None
+
+        col_vc_a, col_vc_b = st.columns([2, 1])
+        with col_vc_a:
+            st.markdown(f"**Paso:** {vc['stage']}")
+            q = _prompt_for(vc["stage"]) if isinstance(vc.get("stage"), str) else ""
+            if q and vc.get("last_prompt") != q:
+                st.session_state.vc_state["last_prompt"] = q
+            if st.button("▶️ Escuchar pregunta", key="vc_speak"):
+                _speak(q)
+
+            # A dedicated WebRTC streamer for voice convo
+            ctx_vc = None
+            if WebRtcMode is not None and webrtc_streamer is not None:
+                ctx_vc = webrtc_streamer(  # type: ignore[arg-type]
+                    key="cd-voice-conv",
+                    mode=WebRtcMode.SENDONLY,
+                    audio_receiver_size=256,
+                    media_stream_constraints={"audio": True, "video": False},
+                    audio_processor_factory=_get_or_create_audio_proc_vc,  # type: ignore[arg-type]
+                )
+            if ctx_vc and ctx_vc.state.playing:
+                st.info("Grabando respuesta… Detén para transcribir")
+            # Detect stop
+            if "vc_prev_active" not in st.session_state:
+                st.session_state.vc_prev_active = False
+            active_now = bool(ctx_vc and ctx_vc.state.playing)
+            prev_active = bool(st.session_state.get("vc_prev_active"))
+            if prev_active and not active_now:
+                # just stopped -> transcribe
+                wav_b = _get_or_create_audio_proc_vc().get_wav_bytes()
+                _get_or_create_audio_proc_vc().reset()
+                if wav_b:
+                    txt = ""
+                    if bool(st.session_state.get("pref_el")):
+                        txt = _el_transcribe_bytes(wav_b)
+                    if not txt:
+                        try:
+                            from backend.src.services.aip_service import stt_transcribe_file  # type: ignore
+                            tmp = Path("temp_vc.wav"); tmp.write_bytes(wav_b)
+                            txt = stt_transcribe_file(str(tmp)) or ""
+                            try: tmp.unlink(missing_ok=True)
+                            except Exception: pass
+                        except Exception:
+                            txt = ""
+                    st.session_state.vc_state["last_answer"] = txt
+                    st.success(f"Transcripción: {txt[:120]}{'…' if len(txt)>120 else ''}")
+                    # Update data based on stage
+                    if vc["stage"] == "ask_pain":
+                        pl = _parse_pain_level(txt or "")
+                        if pl is None:
+                            st.warning("No detecté un número entre 1 y 10. Intenta repetir o escribe el valor abajo.")
+                        else:
+                            st.session_state.vc_state["data"]["pain_level"] = int(pl)
+                            st.session_state.vc_state["stage"] = "ask_desc"
+                            _speak(_prompt_for("ask_desc"))
+                    elif vc["stage"] == "ask_desc":
+                        st.session_state.vc_state["data"]["pain_desc"] = txt
+                        st.session_state.vc_state["stage"] = "ask_mood"
+                        _speak(_prompt_for("ask_mood"))
+                    elif vc["stage"] == "ask_mood":
+                        st.session_state.vc_state["data"]["mood"] = txt
+                        st.session_state.vc_state["stage"] = "ask_sleep"
+                        _speak(_prompt_for("ask_sleep"))
+                    elif vc["stage"] == "ask_sleep":
+                        st.session_state.vc_state["data"]["sleep"] = txt
+                        st.session_state.vc_state["stage"] = "done"
+            st.session_state.vc_prev_active = active_now
+
+            # Manual corrections
+            d = vc["data"]
+            d["pain_level"] = st.number_input("Dolor (1-10)", 1, 10, int(d.get("pain_level") or 5))
+            d["pain_desc"] = st.text_input("Descripción", d.get("pain_desc") or "")
+            d["mood"] = st.text_input("Ánimo", d.get("mood") or "")
+            d["sleep"] = st.text_input("Sueño", d.get("sleep") or "")
+            st.session_state.vc_state["data"] = d
+
+        with col_vc_b:
+            if st.button("🔄 Reiniciar conversación"):
+                st.session_state.vc_state = {"stage": "ask_pain", "data": {"pain_level": None, "pain_desc": "", "mood": "", "sleep": ""}, "last_answer": "", "last_prompt": ""}
+                _get_or_create_audio_proc_vc().reset()
+                st.rerun()
+
+            ready = (isinstance(vc["data"].get("pain_level"), int) and vc["data"].get("pain_desc"))
+            if st.button("✅ Generar y leer recomendación", disabled=not ready):
+                try:
+                    # Prefer Mistral if enabled, else orchestrator
+                    patient_payload = {
+                        "patient_id": st.session_state.get("patient_id", "demo_patient"),
+                        "pain_level": int(vc["data"].get("pain_level") or 5),
+                        "pain_desc": str(vc["data"].get("pain_desc") or ""),
+                        "mood": str(vc["data"].get("mood") or "neutral"),
+                        "sleep": str(vc["data"].get("sleep") or "regular"),
+                    }
+                    suggestion = ""; intervention_type = "general"; details = {}
+                    use_mistral = bool(st.session_state.get("pref_use_mistral")) and (MistralAgent is not None)
+                    if use_mistral:
+                        try:
+                            cfg = MistralAgentConfig(
+                                model=st.session_state.get("pref_mistral_model", os.getenv("MISTRAL_MODEL", "mistral-large-latest")),
+                                temperature=float(st.session_state.get("pref_mistral_temp", float(os.getenv("MISTRAL_TEMPERATURE", "0.4")))),
+                            ) if MistralAgentConfig else None
+                            if "m_agent" not in st.session_state:
+                                st.session_state.m_agent = MistralAgent(cfg)  # type: ignore
+                            prompt = (
+                                f"Paciente: {patient_payload['patient_id']}\n"
+                                f"Dolor (1-10): {patient_payload['pain_level']}\n"
+                                f"Ánimo: {patient_payload['mood']}\nSueño: {patient_payload['sleep']}\n"
+                                "Contexto:\n" + patient_payload['pain_desc'] + "\n\n"
+                                "Genera UNA sugerencia concreta y empática (máx 2 frases) con un tipo entre: breathing, movement, mindfulness, education, reinforcement, general."
+                            )
+                            res = st.session_state.m_agent.ask(prompt)  # type: ignore
+                            suggestion = res.get("text") or "Mantén movilidad suave y respiración diafragmática."
+                            intervention_type = "llm_suggestion"
+                            # capture trace id if available
+                            try:
+                                trace_id = res.get("meta", {}).get("trace_id") if isinstance(res, dict) else None
+                                if trace_id:
+                                    st.session_state["last_trace_id"] = trace_id
+                            except Exception:
+                                pass
+                        except Exception as e:
+                            st.warning(f"Fallo Mistral: {e}")
+                    if not suggestion:
+                        try:
+                            from backend.src.agents.orchestrator import run_patient_cycle, PatientInput as _PatientInput  # type: ignore
+                            cycle = run_patient_cycle(patient_payload, include_report=False)  # type: ignore
+                            aiper_block = cycle.get("aiper", {}) if isinstance(cycle, dict) else {}
+                            suggestion = aiper_block.get("suggestion") or "Mantén movilidad suave y respiración diafragmática."
+                            intervention_type = aiper_block.get("intervention_type") or "general"
+                            details = aiper_block.get("details") or {}
+                        except Exception as e:
+                            suggestion = f"Sugerencia básica: hidratarse y moverse suavemente. ({e})"
+
+                    st.success(f"Recomendación: {suggestion}")
+                    _speak(suggestion)
+                    # Persist minimal events
+                    if store is not None:
+                        try:
+                            pid_ev = patient_id
+                            store.append_event(pid_ev, "voice_conversation_input", {"data": vc["data"]})
+                            if st.session_state.get("last_trace_id"):
+                                details = dict(details or {}); details["trace_id"] = st.session_state["last_trace_id"]
+                            store.append_event(pid_ev, "intervention", {"suggestion": suggestion, "intervention_type": intervention_type, "details": details})
+                        except Exception:
+                            pass
+                except Exception as e:
+                    st.error(f"Error generando recomendación por voz: {e}")
+
     if st.button("Procesar", type="primary", use_container_width=True):
         st.session_state["patient_id"] = patient_id
         with st.spinner("Analizando y generando sugerencia…"):
@@ -949,23 +1234,6 @@ with TAB_CHEQUEO:
             el_audio = b""
             if bool(st.session_state.get("pref_el")):
                 el_audio = _el_synthesize_text(suggestion, voice_id=custom_voice_id)
-            if el_audio:
-                audio_bytes = el_audio
-                audio_mime = "audio/mpeg" if not el_audio.startswith(b"RIFF") else "audio/wav"
-            else:
-                try:
-                    from backend.src.services.aip_service import tts_generate_bytes  # type: ignore
-                    audio_bytes = tts_generate_bytes(suggestion, preferred_voice) or b""
-                except Exception:  # noqa: BLE001
-                    audio_bytes = b""
-
-        # Spinner finished
-        st.success("Procesado")
-        c1, c2, c3 = st.columns(3)
-        c1.metric("Dolor", last_level)
-        c2.metric("Severidad", severity)
-        c3.metric("Turnos", len(st.session_state.conversation_turns))
-        st.markdown("### Resumen de hoy")
         st.markdown(f"- Nivel de dolor: **{last_level}** ({severity}).")
         if st.session_state.get("voice_transcript"):
             st.markdown("- Incluimos tu voz en el análisis.")

@@ -107,6 +107,8 @@ requests = "*"
 streamlit-webrtc = "*"
 pydantic-settings = "*"
 numpy = "*"
+aiortc = "*"
+av = "*"
 
 # (Optional future) Bandit configuration example:
 # [tool.bandit]

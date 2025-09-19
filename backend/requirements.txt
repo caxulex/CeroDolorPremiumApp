@@ -13,3 +13,6 @@ jsonschema
 requests
 streamlit-webrtc
 pydantic-settings
+numpy
+aiortc
+av
