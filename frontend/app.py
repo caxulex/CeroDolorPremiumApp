@@ -26,10 +26,12 @@ import streamlit as st
 from streamlit.components.v1 import html as _html  # lightweight HTML injector for lang and minor hooks
 import os
 try:  # optional dependency for live audio
-    from streamlit_webrtc import webrtc_streamer, WebRtcMode  # type: ignore
+    from streamlit_webrtc import webrtc_streamer, WebRtcMode, AudioProcessorBase  # type: ignore
 except Exception:  # noqa: BLE001
     webrtc_streamer = None  # type: ignore
     WebRtcMode = None  # type: ignore
+    class AudioProcessorBase:  # type: ignore
+        pass
 
 # ---------------------------------------------------------------------------
 # Persistence (puede no existir en modo aislado)
@@ -242,7 +244,7 @@ TAB_CHEQUEO, TAB_PROGRESO, TAB_AVANZADO = st.tabs(["Chequeo Diario", "Progreso",
 # ---------------------------------------------------------------------------
 # Helpers
 
-class AudioBufferProcessor:  # streamlit-webrtc audio processor
+class AudioBufferProcessor(AudioProcessorBase):  # streamlit-webrtc audio processor
     def __init__(self) -> None:
         self.chunks: List[bytes] = []
         self.sample_rate: int | None = None
@@ -303,6 +305,28 @@ class AudioBufferProcessor:  # streamlit-webrtc audio processor
         self.frames = 0
         self.clip_events = 0
         self.level_history.clear()
+
+
+def _get_or_create_audio_proc() -> AudioBufferProcessor:
+    """Return a session-scoped AudioBufferProcessor, creating it if missing.
+
+    Streamlit may rerun scripts frequently; using this guard ensures the
+    audio_processor_factory can always obtain a valid instance without raising
+    AttributeError: st.session_state has no attribute 'audio_proc'.
+    """
+    ap = st.session_state.get("audio_proc")
+    if not isinstance(ap, AudioBufferProcessor):
+        ap = AudioBufferProcessor()
+        st.session_state.audio_proc = ap
+    return ap
+
+# Ensure the audio processor exists early to avoid racey AttributeError on first use
+try:
+    if "audio_proc" not in st.session_state:
+        st.session_state.audio_proc = AudioBufferProcessor()
+except Exception:
+    # If session state is not ready yet, it will be created by the factory later
+    pass
 
 def _get_el_client() -> Any | None:
     """Singleton-ish ElevenLabs client (real network only if env allows)."""
@@ -488,15 +512,14 @@ with TAB_CHEQUEO:
             ctx_live = None
             if WebRtcMode is not None:
                 # Inicializar procesador en el estado
-                if "audio_proc" not in st.session_state:
-                    st.session_state.audio_proc = AudioBufferProcessor()
+                _get_or_create_audio_proc()
                 # Lanzar streamer con procesador de audio custom
-                ctx_live = webrtc_streamer(
+                ctx_live = webrtc_streamer(  # type: ignore[arg-type]
                     key="cd-live-audio",
                     mode=WebRtcMode.SENDONLY,
                     audio_receiver_size=256,
                     media_stream_constraints={"audio": True, "video": False},
-                    audio_processor_factory=lambda: st.session_state.audio_proc,
+                    audio_processor_factory=_get_or_create_audio_proc,  # type: ignore[arg-type]
                 )
                 # Indicadores de estado conversacional
                 c_status, c_meter, c_timer = st.columns([1, 2, 1])
@@ -505,7 +528,7 @@ with TAB_CHEQUEO:
                     if bool(st.session_state.get("pref_privacy_no_wav")):
                         st.caption("Privacidad activa: no se guardará el WAV en disco al finalizar.")
                     # simple peak meter based on last RMS
-                    lvl = float(getattr(st.session_state.audio_proc, "level", 0.0))
+                    lvl = float(getattr(st.session_state.get("audio_proc"), "level", 0.0))
                     bar = "█" * int(lvl * 20)
                     c_meter.code(f"Nivel: {lvl:0.2f}  {bar}")
                     if "rec_started_ts" not in st.session_state:
@@ -513,9 +536,9 @@ with TAB_CHEQUEO:
                     secs = int(time.time() - st.session_state.get("rec_started_ts", time.time()))
                     c_timer.metric("Segundos", secs)
                     # Mostrar clipping y mini-historial
-                    clips = int(getattr(st.session_state.audio_proc, "clip_events", 0))
+                    clips = int(getattr(st.session_state.get("audio_proc"), "clip_events", 0))
                     st.caption(f"Clips: {clips}")
-                    hist = getattr(st.session_state.audio_proc, "level_history", [])
+                    hist = getattr(st.session_state.get("audio_proc"), "level_history", [])
                     if hist:
                         hist_str = "".join("▁▂▃▄▅▆▇"[min(6, int(h*6))] for h in hist)
                         st.code(hist_str)
@@ -531,8 +554,9 @@ with TAB_CHEQUEO:
                 previously_active = bool(st.session_state.get("rec_active_prev"))
                 if previously_active and not current_active:
                     # Se acaba de detener: construir WAV y transcribir
-                    wav_bytes = st.session_state.audio_proc.get_wav_bytes()
-                    st.session_state.audio_proc.reset()
+                    _ap = _get_or_create_audio_proc()
+                    wav_bytes = _ap.get_wav_bytes()
+                    _ap.reset()
                     st.session_state.rec_started_ts = time.time()
                     if wav_bytes:
                         st.info("Transcribiendo audio grabado…")
@@ -577,9 +601,9 @@ with TAB_CHEQUEO:
                 # STT parcial cada ~5s mientras está grabando (opcional, best-effort)
                 if current_active:
                     last_partial = float(st.session_state.get("last_partial_ts", 0.0))
-                    if time.time() - last_partial > 5.0 and getattr(st.session_state, "audio_proc", None):
+                    if time.time() - last_partial > 5.0 and st.session_state.get("audio_proc") is not None:
                         # Tomar snapshot de lo acumulado (sin reset) para un feedback ligero
-                        wav_partial = st.session_state.audio_proc.get_wav_bytes()
+                        wav_partial = _get_or_create_audio_proc().get_wav_bytes()
                         if wav_partial and len(wav_partial) > 4096:
                             try:
                                 vt_p = ""
@@ -660,8 +684,12 @@ with TAB_CHEQUEO:
         if colp2.button("Probar voz"):
             demo_text = "Esta es una prueba de voz del agente."
             audio_demo = b""
+            audio_demo_mime = "audio/wav"
             if bool(st.session_state.get("pref_el")):
                 audio_demo = _el_synthesize_text(demo_text, voice_id=(st.session_state.get("pref_el_voice") or None))
+                if audio_demo:
+                    # ElevenLabs typically returns MP3/OGG; default to MPEG unless RIFF header found
+                    audio_demo_mime = "audio/mpeg" if not audio_demo.startswith(b"RIFF") else "audio/wav"
             if not audio_demo:
                 try:
                     from backend.src.services.aip_service import tts_generate_bytes  # type: ignore
@@ -669,7 +697,7 @@ with TAB_CHEQUEO:
                 except Exception:  # noqa: BLE001
                     audio_demo = b""
             if audio_demo:
-                st.audio(audio_demo, format="audio/wav")
+                st.audio(audio_demo, format=audio_demo_mime)
                 _toast("Reproduciendo prueba de voz")
             else:
                 st.warning("No fue posible sintetizar la prueba de voz.")
@@ -914,6 +942,7 @@ with TAB_CHEQUEO:
                 "intervention_type": intervention_type,
             })
             audio_bytes = b""
+            audio_mime = "audio/wav"
             # Preferir ElevenLabs TTS si el usuario así lo indicó (requiere USE_NETWORK y API Key)
             preferred_voice = st.session_state.get("pref_voice")
             custom_voice_id = (st.session_state.get("pref_el_voice") or None) if bool(st.session_state.get("pref_el")) else None
@@ -922,6 +951,7 @@ with TAB_CHEQUEO:
                 el_audio = _el_synthesize_text(suggestion, voice_id=custom_voice_id)
             if el_audio:
                 audio_bytes = el_audio
+                audio_mime = "audio/mpeg" if not el_audio.startswith(b"RIFF") else "audio/wav"
             else:
                 try:
                     from backend.src.services.aip_service import tts_generate_bytes  # type: ignore
@@ -941,7 +971,7 @@ with TAB_CHEQUEO:
             st.markdown("- Incluimos tu voz en el análisis.")
         st.markdown(f"- Sugerencia ({intervention_type}): **{suggestion}**")
         if audio_bytes:
-            st.audio(audio_bytes, format="audio/wav")
+            st.audio(audio_bytes, format=audio_mime)
         # Persistencia mínima
         if store:
             try:

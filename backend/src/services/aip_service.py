@@ -60,30 +60,48 @@ def tts_speak(text: str, voice: str | None = None) -> bytes | None:
                 pass
 
     # Deterministic fallback ALWAYS if llegamos aquí
-    # Generate a minimal PCM 8-bit mono 8kHz WAV with pseudo pattern derived from text hash
-    sample_rate = 8000
-    duration_sec = min(1.2, 0.04 * max(1, len(text)))  # scale lightly with text length
+    # Generate a smoother PCM 16-bit mono 16kHz WAV with a few soft tones derived from text
+    import math  # local import
+    sample_rate = 16000
+    duration_sec = min(2.0, 0.06 * max(1, len(text)))  # scale lightly with text length (<= ~2s)
     n_samples = int(sample_rate * duration_sec)
     base_hash = sum(bytearray(text.encode('utf-8')[:64])) or 1
-    samples = bytearray()
+    # Choose 3 pseudo-frequencies to avoid a single harsh tone
+    freqs = [200 + (base_hash % 300), 400 + ((base_hash // 3) % 400), 700 + ((base_hash // 7) % 500)]
+    # Simple attack/decay envelope to remove clicks (0.05s attack, 0.1s release)
+    attack = int(sample_rate * 0.05)
+    release = int(sample_rate * 0.10)
+    samples_16 = bytearray()
     for i in range(n_samples):
-        # Simple varying pattern (not real speech): (hash * i) mod 256 with mild envelope
-        val = (base_hash * (i + 1)) % 256
-        # Fade out at the end to avoid clicks
-        if i > n_samples * 0.9:
-            val = int(val * 0.3)
-        samples.append(val)
+        t = i / sample_rate
+        # Envelope
+        if i < attack:
+            env = i / max(1, attack)
+        elif i > n_samples - release:
+            env = max(0.0, (n_samples - i) / max(1, release))
+        else:
+            env = 1.0
+        # Mix sinusoids
+        s = 0.0
+        for idx, f in enumerate(freqs):
+            # slight phase offset per voice index
+            s += math.sin(2 * math.pi * f * t + idx * 0.7)
+        s /= len(freqs)
+        # Apply gentle text-based vibrato
+        vib = 1.0 + 0.02 * math.sin(2 * math.pi * (3 + (base_hash % 5)) * t)
+        val = int(max(-1.0, min(1.0, s * env * vib)) * 32767)
+        samples_16 += struct.pack('<h', val)
     # WAV header (RIFF)
     num_channels = 1
-    bits_per_sample = 8
+    bits_per_sample = 16
     byte_rate = sample_rate * num_channels * bits_per_sample // 8
     block_align = num_channels * bits_per_sample // 8
-    data_chunk_size = len(samples)
+    data_chunk_size = len(samples_16)
     fmt_chunk_size = 16
     riff_chunk_size = 4 + (8 + fmt_chunk_size) + (8 + data_chunk_size)
     header = b"RIFF" + struct.pack('<I', riff_chunk_size) + b"WAVE"
     fmt_chunk = b"fmt " + struct.pack('<IHHIIHH', fmt_chunk_size, 1, num_channels, sample_rate, byte_rate, block_align, bits_per_sample)
-    data_chunk = b"data" + struct.pack('<I', data_chunk_size) + bytes(samples)
+    data_chunk = b"data" + struct.pack('<I', data_chunk_size) + bytes(samples_16)
     wav_bytes = header + fmt_chunk + data_chunk
     if os.getenv("AIP_TTS_DIAG", "false").lower() == "true":
         meta = {"mode": "fallback_wav", "voice": voice or "default", "len": len(text), "samples": n_samples}
