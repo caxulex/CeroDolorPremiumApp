@@ -7,7 +7,7 @@ elevenlabs==1.7.0        # SDK voz
 mistralai==0.4.1         # Cliente Mistral
 streamlit==1.37.1        # UI
 streamlit-webrtc==0.47.1 # WebRTC integración
-jsonschema==4.23.0       # Validación
+jsonschema==4.25.1       # Validación
 requests==2.32.3         # HTTP cliente
 pytest==8.3.2            # Tests
 ruff==0.5.7              # Linter
