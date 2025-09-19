@@ -86,6 +86,28 @@ skip_covered = true
 [tool.cerodolor]
 offline_default = true
 
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+langchain = "*"
+elevenlabs = "*"
+mistralai = "*"
+streamlit = "*"
+fastapi = "*"
+uvicorn = { version = "*", extras = ["standard"] }
+httpx = "*"
+httpx-sse = "*"
+pytest = "*"
+pytest-asyncio = "*"
+ruff = "*"
+jsonschema = "*"
+requests = "*"
+streamlit-webrtc = "*"
+pydantic-settings = "*"
+numpy = "*"
+
 # (Optional future) Bandit configuration example:
 # [tool.bandit]
 # exclude = ["tests"]
