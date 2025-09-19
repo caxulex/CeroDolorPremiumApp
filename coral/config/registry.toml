@@ -1,0 +1,66 @@
+## Coral Server Agent Registry (aligned with full-registry.toml)
+
+## We’ll define agents inline with their metadata and docker runtime hints.
+
+[[inline-agent]]
+[inline-agent.agent]
+name = "Agente Investigador (AI)"
+version = "0.0.1"
+[inline-agent.runtimes.docker]
+image = "caxulex/agent-investigador:latest"
+command = ["/app/start.sh"]
+env = { MISTRAL_API_KEY = "", CORAL_SERVER_URL = "" }
+
+[[inline-agent]]
+[inline-agent.agent]
+name = "Agente del Clínico (AC)"
+version = "0.0.1"
+[inline-agent.runtimes.docker]
+image = "caxulex/agent-clinico:latest"
+command = ["/app/start.sh"]
+env = { CORAL_SERVER_URL = "" }
+
+[[inline-agent]]
+[inline-agent.agent]
+name = "Agente de Interfaz con el Paciente (AIP)"
+version = "0.0.1"
+[inline-agent.runtimes.docker]
+image = "caxulex/agent-interfaz-paciente:latest"
+command = ["/app/start.sh"]
+env = { ELEVENLABS_API_KEY = "", CORAL_SERVER_URL = "" }
+
+[[inline-agent]]
+[inline-agent.agent]
+name = "Agente de Informes para el Clínico (AIC)"
+version = "0.0.1"
+[inline-agent.runtimes.docker]
+image = "caxulex/agent-informes-clinico:latest"
+command = ["/app/start.sh"]
+env = { CORAL_SERVER_URL = "" }
+
+[[inline-agent]]
+[inline-agent.agent]
+name = "Agente de Intervención Personalizada (AIPer)"
+version = "0.0.1"
+[inline-agent.runtimes.docker]
+image = "caxulex/agent-intervencion:latest"
+command = ["/app/start.sh"]
+env = { CORAL_SERVER_URL = "" }
+
+[[inline-agent]]
+[inline-agent.agent]
+name = "Agente de Síntesis de Datos (ASD)"
+version = "0.0.1"
+[inline-agent.runtimes.docker]
+image = "caxulex/agent-sintesis-datos:latest"
+command = ["/app/start.sh"]
+env = { CORAL_SERVER_URL = "" }
+
+[[inline-agent]]
+[inline-agent.agent]
+name = "Agente de Transcripción (ElevenLabs)"
+version = "0.0.1"
+[inline-agent.runtimes.docker]
+image = "caxulex/agent-transcripcion:latest"
+command = ["/app/start.sh"]
+env = { ELEVENLABS_API_KEY = "", CORAL_SERVER_URL = "" }

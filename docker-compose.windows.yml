@@ -1,0 +1,5 @@
+services:
+  coral-server:
+    volumes:
+      - ./coral/config:/config:ro
+      - "//./pipe/docker_engine:/var/run/docker.sock"

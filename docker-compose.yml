@@ -1,0 +1,31 @@
+services:
+  coral-server:
+    image: ghcr.io/coral-protocol/coral-server:latest
+    container_name: coral-server
+    restart: unless-stopped
+    ports:
+      - "5555:5555" # MCP server port
+    # environment:
+    #   CONFIG_FILE_PATH: /config/config.toml
+    #   REGISTRY_FILE_PATH: /config/registry.toml
+    environment:
+      CONFIG_FILE_PATH: /config/config.toml
+      REGISTRY_FILE_PATH: /config/registry.toml
+    volumes:
+      # Mount our Coral config files
+      - ./coral/config:/config:ro
+      # IMPORTANT: Give the server access to the host Docker socket so it can run dockerized agents
+      # Linux/macOS (Docker Desktop / native):
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Windows (Docker Desktop, named pipe). Uncomment the next line and comment the one above:
+      # - npipe:////./pipe/docker_engine:/var/run/docker.sock
+    # Healthcheck is optional; if the image exposes a status endpoint, enable it later
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5555/health"]
+    #   interval: 10s
+    #   timeout: 3s
+    #   retries: 5
+
+networks:
+  default:
+    name: coral-net

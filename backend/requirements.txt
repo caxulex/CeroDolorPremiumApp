@@ -2,8 +2,14 @@ langchain
 elevenlabs
 mistralai
 streamlit
+fastapi
+uvicorn[standard]
+httpx
+httpx-sse
 pytest
+pytest-asyncio
 ruff
 jsonschema
 requests
 streamlit-webrtc
+pydantic-settings

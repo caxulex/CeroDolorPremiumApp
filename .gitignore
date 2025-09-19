@@ -1,4 +1,24 @@
-# OS and tooling
+# Environment files
+.env
+.env.*
+
+# Docker artifacts
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo# OS and tooling
 .DS_Store
 Thumbs.db
 
@@ -20,3 +40,33 @@ checkpoints/*.zip
 
 # VS Code
 .vscode/
+
+# Accidental JAR extraction and root JARs (prevents huge untracked trees)
+/*.jar
+/coral-jar/
+/META-INF/
+/_COROUTINE/
+/OSGI-INF/
+/org/
+/com/
+/io/
+/kotlin/
+/kotlinx/
+/javassist/
+/okhttp3/
+/okio/
+/javax/
+/nl/
+/ch/
+/it/
+/mu/
+/net/
+/google/
+/lib/
+/mozilla/
+/darwin-*/
+/linux-*/
+/win32-*/
+/samples/
+/draftv3/
+/draftv4/

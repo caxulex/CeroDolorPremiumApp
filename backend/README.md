@@ -33,6 +33,18 @@ MCP client shim (minimal)
   - POST mapped payload (adjust endpoints):
     - `pwsh -File scripts/run_mcp_client.ps1 -EchoPath "/echo" -PayloadFile backend/samples/router_payload.custom.json -Send`
 
+SSE MCP client (Coral)
+- Connects to Coral's MCP server via SSE and prints incoming events as JSON.
+  - First event only (with timeout):
+    - `& ..\\.venv\\Scripts\\python.exe backend\\src\\mcp\\sse_client.py --url http://localhost:5555 --path / --once --timeout 10`
+  - Continuous stream:
+    - `& ..\\.venv\\Scripts\\python.exe backend\\src\\mcp\\sse_client.py --url http://localhost:5555 --path /`
+  - Smoke wrapper (from repo root):
+    - `& ..\\.venv\\Scripts\\python.exe scripts\\mcp_client_smoke.py --url http://localhost:5555 --path / --once`
+  - Notes:
+    - If your server exposes SSE at another path, pass `--path /sse`.
+    - Use `--token <BEARER>` if Coral requires an auth header.
+
 Coral MCP (Scaffold)
 - Helper scripts to prepare local Coral MCP repos without affecting tests/CI
   1) Clone repos (uses defaults if no URLs provided):

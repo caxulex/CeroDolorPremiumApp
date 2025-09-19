@@ -1,0 +1,26 @@
+# Coral Server configuration (aligned with full-config.toml schema)
+
+[network]
+bind_address = "0.0.0.0"
+external_address = "0.0.0.0"
+bind_port = 5555
+
+[docker]
+# Inside the Linux container we mount the host docker socket at this path (use full URI)
+socket = "unix:///var/run/docker.sock"
+# Use Docker Desktop host gateway
+address = "host.docker.internal"
+responseTimeout = 30
+connectionTimeout = 30
+maxConnections = 128
+
+[registry]
+indexers = { }
+
+[cache]
+root_path = "/root/.coral"
+indexer_cache_path = "/root/.coral/registry"
+agent_cache_path = "/root/.coral/agent"
+
+[security]
+enableReferencedExporting = false

@@ -1,0 +1,471 @@
+syntax = "proto3";
+
+package coral.escrow.v1;
+
+// ===== Shared Types =====
+
+message Config {
+  string rpc_url = 1;
+  string commitment = 2;
+  SignerConfig signer = 3;  // Signer configuration
+}
+
+// Signer configuration
+message SignerConfig {
+  oneof signer_type {
+    string file_path = 1;     // Path to keypair file
+    string env_var = 2;       // Environment variable name
+    CrossmintSignerConfig crossmint = 3;  // Crossmint wallet signer
+    LedgerConfig ledger = 4;  // Hardware wallet signer
+  }
+}
+
+// Ledger hardware wallet configuration
+message LedgerConfig {
+  uint32 derivation_index = 1;  // Derivation index (0, 1, 2, etc.) - maps to usb://ledger?key=X
+}
+
+// Crossmint signer configuration (simplified for runtime use)
+message CrossmintSignerConfig {
+  string api_key = 1;              // Crossmint API key
+  string wallet_address = 2;        // Wallet address (also used as locator)
+  string device_keypair_path = 3;   // Path to device keypair for delegated signing
+  bool use_staging = 4;             // Use staging (true) or production (false) API
+}
+
+message Credentials {
+  bytes payer_keypair = 1;  // DEPRECATED - use SignerCredentials
+  string authority_pubkey = 2;
+}
+
+// New secure credentials that don't expose private keys
+message SignerCredentials {
+  string authority_pubkey = 1;  // Public key of the signer
+}
+
+message AgentConfig {
+  string id = 1;
+  uint64 cap = 2;
+  string developer = 3;  // Developer who can claim AND receive funds (simplified from payout_owner + developer_pubkey)
+}
+
+message ClaimMultipleItemProto {
+  string agent_id = 1;
+  uint64 amount = 2;
+}
+
+message SignedClaimMultipleItemProto {
+  string agent_id = 1;
+  uint64 amount = 2;
+  bytes developer_signature = 3;  // 64-byte Ed25519 signature (used for creating Ed25519 instruction, not passed to program)
+}
+
+// ===== Operations =====
+
+enum OperationType {
+  OPERATION_TYPE_UNSPECIFIED = 0;
+  OPERATION_TYPE_CREATE_SESSION = 1;
+  OPERATION_TYPE_DEPOSIT_FUNDS = 2;
+  OPERATION_TYPE_CLAIM = 3;
+  OPERATION_TYPE_CLAIM_MULTIPLE = 4;
+  OPERATION_TYPE_REFUND_LEFTOVER = 5;
+  OPERATION_TYPE_GENERATE_MINT = 6;
+  OPERATION_TYPE_CREATE_ATA = 7;
+  OPERATION_TYPE_MINT_TO = 8;
+  OPERATION_TYPE_CLAIM_WITH_SIGNATURE = 9;
+  OPERATION_TYPE_CLAIM_MULTIPLE_WITH_SIGNATURES = 10;
+  OPERATION_TYPE_INIT_PROGRAM_CONFIG = 11;
+  OPERATION_TYPE_UPDATE_PROGRAM_CONFIG = 12;
+  OPERATION_TYPE_ADD_ALLOWED_MINT = 13;
+  OPERATION_TYPE_REMOVE_ALLOWED_MINT = 14;
+  OPERATION_TYPE_GET_PROGRAM_CONFIG = 15;
+  OPERATION_TYPE_INIT_AND_FUND_SESSION = 16;
+  OPERATION_TYPE_GET_SESSION = 17;
+}
+
+// ===== Request Messages =====
+
+message CreateSessionRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  uint64 session_id = 3;
+  repeated AgentConfig agents = 4;
+  string mint_pubkey = 5;
+}
+
+message DepositFundsRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  uint64 session_id = 3;
+  uint64 amount = 4;
+}
+
+message InitAndFundSessionRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  uint64 session_id = 3;
+  repeated AgentConfig agents = 4;
+  string mint_pubkey = 5;
+  uint64 funding_amount = 6;
+}
+
+message ClaimRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  uint64 session_id = 3;
+  string agent_id = 4;
+  uint64 amount = 5;
+}
+
+message ClaimWithSignatureRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  uint64 session_id = 3;
+  string agent_id = 4;
+  uint64 amount = 5;
+  bytes developer_signature = 6;  // 64-byte Ed25519 signature (used for creating Ed25519 instruction, not passed to program)
+}
+
+message ClaimMultipleRequestProto {
+  Config config = 1;
+  Credentials credentials = 2;
+  uint64 session_id = 3;
+  repeated ClaimMultipleItemProto claims = 4;
+}
+
+message ClaimMultipleWithSignaturesRequestProto {
+  Config config = 1;
+  Credentials credentials = 2;
+  uint64 session_id = 3;
+  repeated SignedClaimMultipleItemProto signed_claims = 4;
+}
+
+message RefundLeftoverRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  uint64 session_id = 3;
+  string mint_pubkey = 4;
+}
+
+message MintRequest {
+  Config config = 1;
+}
+
+message GenerateMintRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+}
+
+message CreateAtaRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  string mint_pubkey = 3;
+  string owner_pubkey = 4;
+}
+
+message MintToRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  string mint_pubkey = 3;
+  string destination_pubkey = 4;
+  uint64 amount = 5;
+}
+
+// Crossmint wallet management requests
+message CreateCrossmintWalletRequest {
+  string api_key = 1;
+  string linked_user = 2;
+  string admin_signer_address = 3;  // Optional for BYOK flow
+  bool use_staging = 4;  // Use staging API (true) or production API (false), defaults to true
+}
+
+message GetCrossmintWalletRequest {
+  string api_key = 1;
+  string linked_user = 2;
+  bool use_staging = 3;  // Use staging API (true) or production API (false), defaults to true
+}
+
+message GenerateKeypairRequest {
+  string storage_path = 1;
+  bool overwrite_existing = 2;
+}
+
+message GenerateKeypairResponse {
+  string public_key = 1;
+  string storage_path = 2;
+  bool created_new = 3;
+}
+
+// Device registration with optional demo auto-approval
+message RegisterDeviceRequest {
+  Config config = 1;                        // Contains the Crossmint config
+  optional string admin_keypair_path = 2;   // For demo auto-approval only
+}
+
+message RegisterDeviceResponse {
+  optional string transaction_id = 1;  // Transaction ID if approval needed, null if already registered
+}
+
+// Admin operation requests
+message InitProgramConfigRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  uint64 max_session_value = 3;
+}
+
+message UpdateProgramConfigRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  optional bool paused = 3;
+  optional uint64 max_session_value = 4;
+}
+
+message AddAllowedMintRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  string mint_pubkey = 3;
+}
+
+message RemoveAllowedMintRequest {
+  Config config = 1;
+  Credentials credentials = 2;
+  string mint_pubkey = 3;
+}
+
+message GetProgramConfigRequest {
+  Config config = 1;
+}
+
+message CheckMintAllowedRequest {
+  Config config = 1;
+  string mint_pubkey = 2;
+}
+
+message GetSessionRequest {
+  Config config = 1;
+  uint64 session_id = 2;
+  string authority_pubkey = 3;  // Authority that created the session
+}
+
+message GetAllSessionsRequest {
+  Config config = 1;
+}
+
+message GetAllSessionsResponse {
+  repeated SessionDetailInfo sessions = 1;
+  uint32 total_count = 2;
+}
+
+
+// ===== Response Messages =====
+
+message SessionInfo {
+  uint64 session_id = 1;
+  string transaction_hash = 2;
+  uint64 total_cap = 3;
+  uint32 agent_count = 4;
+}
+
+message DepositInfo {
+  uint64 session_id = 1;
+  string transaction_hash = 2;
+  uint64 amount_deposited = 3;
+}
+
+message InitAndFundSessionInfo {
+  uint64 session_id = 1;
+  string transaction_hash = 2;
+  uint64 total_cap = 3;
+  uint32 agent_count = 4;
+  uint64 amount_funded = 5;
+}
+
+message ClaimInfo {
+  uint64 session_id = 1;
+  string transaction_hash = 2;
+  string agent_id = 3;
+  uint64 amount_claimed = 4;
+}
+
+message ClaimMultipleInfo {
+  uint64 session_id = 1;
+  string transaction_hash = 2;
+  uint32 claims_processed = 3;
+  uint64 total_amount_claimed = 4;
+  repeated string agent_ids = 5;
+}
+
+message RefundInfo {
+  uint64 session_id = 1;
+  string transaction_hash = 2;
+  uint64 amount_refunded = 3;
+  string authority_ata = 4;
+}
+
+message MintInfo {
+  string mint_pubkey = 1;
+  string transaction_hash = 2;
+  string mint_authority = 3;
+  uint32 decimals = 4;
+}
+
+message AtaInfo {
+  string ata_pubkey = 1;
+  string transaction_hash = 2;
+  string owner_pubkey = 3;
+  string mint_pubkey = 4;
+  bool created = 5;
+}
+
+// Admin operation responses
+message ProgramConfigInfo {
+  string admin_pubkey = 1;
+  bool paused = 2;
+  uint64 max_session_value = 3;
+  string config_pda = 4;
+}
+
+message AdminOperationResult {
+  string transaction_hash = 1;
+  string operation = 2;
+  bool success = 3;
+  string details = 4;
+}
+
+message CheckMintAllowedResult {
+  bool is_allowed = 1;
+  string mint_pubkey = 2;
+  string mint_pda = 3;
+}
+
+// Detailed session information (for get_session)
+message SessionDetailInfo {
+  uint64 session_id = 1;
+  string authority = 2;
+  string mint = 3;
+  uint64 vault_balance = 4;
+  uint64 total_max_caps = 5;
+  int64 claim_deadline = 6;
+  repeated SessionAgentInfo agents = 7;
+  bool is_active = 8;
+  string session_pda = 9;
+  string vault_pda = 10;
+  uint32 bump = 11;
+}
+
+message SessionAgentInfo {
+  string agent_id = 1;
+  string developer = 2;
+  uint64 max_cap = 3;
+  bool has_claimed = 4;
+}
+
+
+// ===== Transaction Building =====
+
+message BuildTransactionRequest {
+  Config config = 1;
+  SignerCredentials credentials = 2;
+  OperationType operation = 3;
+  
+  // Operation-specific parameters
+  oneof params {
+    CreateSessionParams create_session = 10;
+    DepositFundsParams deposit_funds = 11;
+    ClaimParams claim = 12;
+  }
+}
+
+message CreateSessionParams {
+  uint64 session_id = 1;
+  repeated AgentConfig agents = 2;
+  string mint_pubkey = 3;
+}
+
+message DepositFundsParams {
+  uint64 session_id = 1;
+  uint64 amount = 2;
+}
+
+message ClaimParams {
+  uint64 session_id = 1;
+  string agent_id = 2;
+  uint64 amount = 3;
+}
+
+message UnsignedTransaction {
+  bytes serialized_message = 1;  // Serialized transaction ready for signing
+  string recent_blockhash = 2;
+  uint32 num_signatures_required = 3;
+  repeated string signer_pubkeys = 4;  // Expected signers in order
+}
+
+message SignTransactionRequest {
+  bytes serialized_message = 1;  // Transaction message to sign
+  Config config = 2;  // Config with signer information
+}
+
+message SignedTransaction {
+  bytes signature = 1;  // 64-byte Ed25519 signature
+  string signer_pubkey = 2;  // Who signed it
+}
+
+// ===== Unified Request/Response =====
+
+message CoralRequest {
+  OperationType operation = 1;
+  oneof request {
+    CreateSessionRequest create_session = 10;
+    DepositFundsRequest deposit_funds = 11;
+    ClaimRequest claim = 12;
+    ClaimMultipleRequestProto claim_multiple = 13;
+    RefundLeftoverRequest refund_leftover = 14;
+    GenerateMintRequest generate_mint = 15;
+    CreateAtaRequest create_ata = 16;
+    MintToRequest mint_to = 17;
+    ClaimWithSignatureRequest claim_with_signature = 18;
+    ClaimMultipleWithSignaturesRequestProto claim_multiple_with_signatures = 19;
+    InitProgramConfigRequest init_program_config = 20;
+    UpdateProgramConfigRequest update_program_config = 21;
+    AddAllowedMintRequest add_allowed_mint = 22;
+    RemoveAllowedMintRequest remove_allowed_mint = 23;
+    GetProgramConfigRequest get_program_config = 24;
+    GetSessionRequest get_session = 25;
+    GetAllSessionsRequest get_all_sessions = 26;
+    RegisterDeviceRequest register_device = 27;
+  }
+}
+
+// Crossmint wallet info
+message CrossmintWalletInfo {
+  string wallet_address = 1;
+  string wallet_locator = 2;
+  string linked_user = 3;
+  string admin_signer_address = 4;
+  string admin_signer_locator = 5;
+}
+
+message CoralResponse {
+  bool success = 1;
+  string error_message = 2;
+  oneof response {
+    SessionInfo session_info = 10;
+    DepositInfo deposit_info = 11;
+    ClaimInfo claim_info = 12;
+    ClaimMultipleInfo claim_multiple_info = 13;
+    RefundInfo refund_info = 14;
+    MintInfo mint_info = 15;
+    AtaInfo ata_info = 16;
+    InitAndFundSessionInfo init_and_fund_session_info = 17;
+    UnsignedTransaction unsigned_transaction = 20;
+    SignedTransaction signed_transaction = 21;
+    CrossmintWalletInfo crossmint_wallet_info = 22;
+    GenerateKeypairResponse generate_keypair = 23;
+    ProgramConfigInfo program_config_info = 24;
+    AdminOperationResult admin_operation_result = 25;
+    CheckMintAllowedResult check_mint_allowed_result = 26;
+    SessionDetailInfo session_detail_info = 27;
+    GetAllSessionsResponse get_all_sessions = 28;
+    RegisterDeviceResponse register_device = 29;
+  }
+}
