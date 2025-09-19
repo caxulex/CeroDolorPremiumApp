@@ -10,6 +10,6 @@ streamlit-webrtc==0.47.1 # WebRTC integración
 jsonschema==4.23.0       # Validación
 requests==2.32.3         # HTTP cliente
 pytest==8.3.2            # Tests
-ruff==0.5.7              # Linter
+ruff==0.13.1              # Linter
 # cryptography opcional para Fernet (si no instalado, documentar):
 cryptography==43.0.1     # Export cifrado (añadir a extras si se formaliza)
