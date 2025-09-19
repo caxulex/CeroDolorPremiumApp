@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ["--baseline", ".detect-secrets.baseline"]
+        exclude: "tests/"
+# Optional trufflehog (commented out to avoid heavy runtime by default)
+#  - repo: https://github.com/trufflesecurity/trufflehog
+#    rev: v3.82.10
+#    hooks:
+#      - id: trufflehog
+#        args: ["filesystem", "--no-update", "--fail", "."]

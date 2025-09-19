@@ -15,6 +15,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
+from backend.src.logging_config import get_logger  # noqa: E402
 from backend.src.mcp.mapping import resolve_tool_paths  # noqa: E402
 from backend.src.mcp.validation import (  # noqa: E402
     validate_aip_to_asd,
@@ -25,6 +26,9 @@ from backend.src.mcp.validation import (  # noqa: E402
     validate_physio_to_patient,
 )
 from backend.src.services.aic_service import generate_structured_report  # noqa: E402
+from backend.src.utils.normalization import sanitize_enum
+
+logger = get_logger(__name__)
 
 BACKEND = Path(__file__).resolve().parents[2]  # backend/src/agents/ -> backend/
 AIP = BACKEND / "src" / "agents" / "aip.py"
@@ -35,13 +39,20 @@ CONTRACTS = BACKEND.parent / "specs" / "001-description-esta-secci" / "contracts
 
 
 def run_agent(path: Path, payload: dict) -> dict:
+    start = time.perf_counter()
     proc = subprocess.run(  # noqa: S603
         [sys.executable, str(path)],
         input=json.dumps(payload).encode(),
         capture_output=True,
         check=True,
     )
-    return json.loads(proc.stdout.decode() or "{}")
+    dur_ms = int((time.perf_counter() - start) * 1000)
+    try:
+        out = json.loads(proc.stdout.decode() or "{}")
+    except json.JSONDecodeError:
+        out = {"raw": proc.stdout.decode(errors="ignore")[:500]}
+    logger.debug("ran agent %s in %d ms", path.name, dur_ms)
+    return out
 
 
 def run_mcp_client(
@@ -105,11 +116,20 @@ def _http_post(url: str, payload: dict[str, Any], timeout: float = 5.0) -> dict[
 
 def _to_aip_to_asd(start: dict[str, Any]) -> dict[str, Any]:
     # Build a contract-compliant payload from provided start data (fallbacks for demo)
+    # Normalize Spanish domain fields to the schema enumerations where needed.
+    raw_sleep = start.get("sleep", "regular")
+    if raw_sleep not in {"bueno", "regular", "irregular", "malo"}:
+        raw_sleep = "regular"  # neutral default
+    def _safe_int(v: Any, default: int = 5) -> int:
+        try:
+            return int(v)
+        except Exception:
+            return default
     pain = {
-        "level": int(start.get("pain_level", 5)),
+        "level": _safe_int(start.get("pain_level", 5), 5),
         "description": start.get("pain_desc", "placeholder"),
         "mood": start.get("mood", "neutral"),
-        "sleep_quality": start.get("sleep", "desconocido"),
+        "sleep_quality": raw_sleep,
     }
     return {
         "message_type": "pain_submission",
@@ -155,6 +175,8 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--mas-demo", action="store_true", help="Run minimal MAS flow (Patient->Clinician->Physio) locally")
     parser.add_argument("--mas-mcp", action="store_true", help="When used with --mas-demo, POST MAS messages via MCP echo")
     parser.add_argument("--include-aic", action="store_true", help="Include clinician AIC report in output (MAS/local only)")
+    parser.add_argument("--compact-output", action="store_true", help="Emit final JSON on a single line (easier piping)")
+    parser.add_argument("--logs-stderr", action="store_true", help="Send logs to stderr so stdout is pure JSON")
     return parser.parse_args()
 
 
@@ -194,97 +216,111 @@ def _run_mcp_mode(*, args: argparse.Namespace, aip_to_asd: dict[str, Any], v1_ok
 
 
 def _run_mas_demo(args: argparse.Namespace, start: dict[str, Any]) -> None:  # noqa: C901, PLR0915
-        patient_msg = {
-            "message_type": "patient_report",
-            "patient_id": start.get("patient_id", "demo_patient"),
-            "timestamp": _utc_iso(),
-            "patient_report": {
-                "pain_level": int(start.get("pain_level", 5)),
-                "description": start.get("pain_desc", "placeholder"),
-                "mood": start.get("mood", "neutral"),
-                "sleep_quality": start.get("sleep", "desconocido"),
-            },
-        }
-        m1_ok, m1_err = _ok_err_from_errors(validate_patient_to_clinician(patient_msg))
+    logger.info("starting MAS demo include_aic=%s mas_mcp=%s", args.include_aic, args.mas_mcp)
+    # Normalize sleep quality to allowed enum values for patient_to_clinician contract.
+    raw_sleep = start.get("sleep", "regular")
+    if raw_sleep not in {"bueno", "regular", "irregular", "malo"}:
+        raw_sleep = "regular"
+    t0_patient = time.perf_counter()
+    patient_msg = {
+        "message_type": "patient_report",
+        "patient_id": start.get("patient_id", "demo_patient"),
+        "timestamp": _utc_iso(),
+        "patient_report": {
+            "pain_level": int(start.get("pain_level", 5)),
+            "description": start.get("pain_desc", "placeholder"),
+            "mood": start.get("mood", "neutral"),
+            "sleep_quality": raw_sleep,
+        },
+    }
+    patient_dur_ms = int((time.perf_counter() - t0_patient) * 1000)
+    m1_ok, m1_err = _ok_err_from_errors(validate_patient_to_clinician(patient_msg))
+    # Clinician stub: turn patient report into a clinical_request with a goal and basic constraints
+    t0_clinician = time.perf_counter()
+    clinician_msg = {
+        "message_type": "clinical_request",
+        "patient_id": patient_msg["patient_id"],
+        "timestamp": _utc_iso(),
+        "clinical_request": {
+            "goal": "reduce_pain_and_increase_mobility",
+            "constraints": [
+                "avoid_overexertion",
+                f"pain_level<= {patient_msg['patient_report']['pain_level']}",
+            ],
+            "insights": ["daytime_pain_spikes", "sleep_variability"],
+        },
+    }
+    clinician_dur_ms = int((time.perf_counter() - t0_clinician) * 1000)
+    m2_ok, m2_err = _ok_err_from_errors(validate_clinician_to_physio(clinician_msg))
+    # Physio stub: produce a simple exercise plan
+    t0_physio = time.perf_counter()
+    physio_msg = {
+        "message_type": "exercise_plan",
+        "patient_id": clinician_msg["patient_id"],
+        "timestamp": _utc_iso(),
+        "exercise_plan": {
+            "items": [
+                {
+                    "name": "gentle_stretching",
+                    "repetitions": 5,
+                    "frequency_per_day": 2,
+                    "notes": "slow, controlled",
+                },
+                {
+                    "name": "short_walk",
+                    "repetitions": 1,
+                    "frequency_per_day": 1,
+                    "notes": "5-10 minutes",
+                },
+            ],
+        },
+    }
+    physio_dur_ms = int((time.perf_counter() - t0_physio) * 1000)
+    m3_ok, m3_err = _ok_err_from_errors(validate_physio_to_patient(physio_msg))
+    out_obj: dict[str, Any] = {
+        "validation": {
+            "patient_to_clinician": {"ok": m1_ok, "error": m1_err},
+            "clinician_to_physio": {"ok": m2_ok, "error": m2_err},
+            "physio_to_patient": {"ok": m3_ok, "error": m3_err},
+        },
+        "patient": patient_msg,
+        "clinician": clinician_msg,
+        "physio": physio_msg,
+        "timings_ms": {
+            "patient_construction": patient_dur_ms,
+            "clinician_construction": clinician_dur_ms,
+            "physio_construction": physio_dur_ms,
+        },
+    }
 
-        # Clinician stub: turn patient report into a clinical_request with a goal and basic constraints
-        clinician_msg = {
-            "message_type": "clinical_request",
-            "patient_id": patient_msg["patient_id"],
-            "timestamp": _utc_iso(),
-            "clinical_request": {
-                "goal": "reduce_pain_and_increase_mobility",
-                "constraints": [
-                    "avoid_overexertion",
-                    f"pain_level<= {patient_msg['patient_report']['pain_level']}",
-                ],
-                "insights": ["daytime_pain_spikes", "sleep_variability"],
-            },
-        }
-        m2_ok, m2_err = _ok_err_from_errors(validate_clinician_to_physio(clinician_msg))
+    # Optional: Generate AIC clinician report and validate against schema
+    if args.include_aic:
+        try:
+            t0_aic = time.perf_counter()
+            report = generate_structured_report(
+                clinician_msg["patient_id"],
+                {
+                    "patient": patient_msg,
+                    "clinician": clinician_msg,
+                    "physio": physio_msg,
+                },
+            )
+            aic_dur_ms = int((time.perf_counter() - t0_aic) * 1000)
+            logger.info("generated AIC report in %d ms", aic_dur_ms)
+            aic_errs = validate_clinician_report(report)
+            out_obj["validation"]["clinician_report"] = {
+                "ok": len(aic_errs) == 0,
+                "error": None if not aic_errs else aic_errs[0],
+            }
+            out_obj["aic_report"] = report
+            out_obj["aic_meta"] = {"duration_ms": aic_dur_ms}
+        except Exception as e:  # noqa: BLE001 - defensive guard for demo path
+            out_obj["validation"]["clinician_report"] = {
+                "ok": False,
+                "error": f"aic_failed: {e}",
+            }
 
-        # Physio stub: produce a simple exercise plan
-        physio_msg = {
-            "message_type": "exercise_plan",
-            "patient_id": clinician_msg["patient_id"],
-            "timestamp": _utc_iso(),
-            "exercise_plan": {
-                "items": [
-                    {
-                        "name": "gentle_stretching",
-                        "repetitions": 5,
-                        "frequency_per_day": 2,
-                        "notes": "slow, controlled",
-                    },
-                    {
-                        "name": "short_walk",
-                        "repetitions": 1,
-                        "frequency_per_day": 1,
-                        "notes": "5-10 minutes",
-                    },
-                ],
-            },
-        }
-        m3_ok, m3_err = _ok_err_from_errors(validate_physio_to_patient(physio_msg))
-
-        out_obj: dict[str, Any] = {
-            "validation": {
-                "patient_to_clinician": {"ok": m1_ok, "error": m1_err},
-                "clinician_to_physio": {"ok": m2_ok, "error": m2_err},
-                "physio_to_patient": {"ok": m3_ok, "error": m3_err},
-            },
-            "patient": patient_msg,
-            "clinician": clinician_msg,
-            "physio": physio_msg,
-        }
-
-        # Optional: Generate AIC clinician report and validate against schema
-        if args.include_aic:
-            try:
-                t0_aic = time.perf_counter()
-                report = generate_structured_report(
-                    clinician_msg["patient_id"],
-                    {
-                        "patient": patient_msg,
-                        "clinician": clinician_msg,
-                        "physio": physio_msg,
-                    },
-                )
-                aic_dur_ms = int((time.perf_counter() - t0_aic) * 1000)
-                aic_errs = validate_clinician_report(report)
-                out_obj["validation"]["clinician_report"] = {
-                    "ok": len(aic_errs) == 0,
-                    "error": None if not aic_errs else aic_errs[0],
-                }
-                out_obj["aic_report"] = report
-                out_obj["aic_meta"] = {"duration_ms": aic_dur_ms}
-            except Exception as e:  # noqa: BLE001 - defensive guard for demo path
-                out_obj["validation"]["clinician_report"] = {
-                    "ok": False,
-                    "error": f"aic_failed: {e}",
-                }
-
-        if args.mas_mcp:
+    if args.mas_mcp:
             # Use MCP client shim to POST each message to echo endpoint
             paths = resolve_tool_paths()
             base_url = paths.base_url
@@ -313,6 +349,7 @@ def _run_mas_demo(args: argparse.Namespace, start: dict[str, Any]) -> None:  # n
                 t0 = time.perf_counter()
                 post_res = _http_post(echo_url, msg)
                 dur_ms = int((time.perf_counter() - t0) * 1000)
+                logger.debug("MCP post %s -> %s (%d ms) ok=%s", label, echo_path, dur_ms, ok)
                 transcript.append(
                     {
                         "label": label,
@@ -327,7 +364,7 @@ def _run_mas_demo(args: argparse.Namespace, start: dict[str, Any]) -> None:  # n
             out_obj["mcp_transcript"] = transcript
 
         # If we have both an AIC report and a MAS MCP transcript, enrich highlights and attach an AIC transcript item
-        if args.include_aic and out_obj.get("aic_report") and out_obj.get("mcp_transcript"):
+    if args.include_aic and out_obj.get("aic_report") and out_obj.get("mcp_transcript"):
             try:
                 aic: dict[str, Any] = out_obj["aic_report"]  # type: ignore[assignment]
                 highlights = list(aic.get("highlights", []))
@@ -366,37 +403,56 @@ def _run_mas_demo(args: argparse.Namespace, start: dict[str, Any]) -> None:  # n
                 # Non-fatal enrichment failure should not break main output
                 pass
 
+    if args.compact_output:
+        print(json.dumps(out_obj, separators=(",", ":")))  # noqa: T201
+    else:
         print(json.dumps(out_obj, indent=2))  # noqa: T201
 
 
 def _run_local_chain(*, aip_to_asd: dict[str, Any], v1_ok: bool, v1_err: str | None) -> None:
-    # Default: local subprocess agents
+    logger.info("starting local chain validation_ok=%s", v1_ok)
     r1 = run_agent(AIP, aip_to_asd)
 
-    asd_to_aiper = _to_asd_to_aiper(aip_to_asd["patient_id"], r1.get("insights"))
+    # Run ASD on the same mapped payload (it derives insights)
+    r2 = run_agent(ASD, aip_to_asd)
+    # Envelope-aware extraction of insights for next hop
+    insights_obj = None
+    if isinstance(r2, dict):
+        insights_obj = (r2.get("data") or {}).get("insights") if isinstance(r2.get("data"), dict) else r2.get("insights")
+    asd_to_aiper = _to_asd_to_aiper(aip_to_asd["patient_id"], insights_obj)
     v2_ok, v2_err = _ok_err_from_errors(validate_asd_to_aiper(asd_to_aiper))
 
-    r2 = run_agent(ASD, asd_to_aiper)
     r3 = run_agent(AIPER, asd_to_aiper)
+    logger.info("completed local chain")
 
-    print(  # noqa: T201
-        json.dumps(
-            {
-                "validation": {
-                    "aip_to_asd": {"ok": v1_ok, "error": v1_err},
-                    "asd_to_aiper": {"ok": v2_ok, "error": v2_err},
-                },
-                "aip": r1,
-                "asd": r2,
-                "aiper": r3,
-            },
-            indent=2,
-        ),
-    )
+    try:
+        from backend.src.agents.base import make_meta  # type: ignore
+        meta = make_meta()
+    except Exception:
+        meta = None
+    payload = {
+        "validation": {
+            "aip_to_asd": {"ok": v1_ok, "error": v1_err},
+            "asd_to_aiper": {"ok": v2_ok, "error": v2_err},
+        },
+        "aip": r1,
+        "asd": r2,
+        "aiper": r3,
+    }
+    envelope = {"ok": True, "data": payload, "error": None, "meta": meta}
+    print(json.dumps(envelope, indent=2))  # noqa: T201
 
 
 def main() -> None:
     args = _parse_args()
+    # Optionally move logs to stderr so stdout can be clean JSON for piping
+    if getattr(args, "logs_stderr", False):  # pragma: no cover - CLI convenience
+        import logging, sys as _sys  # noqa: PLC0415
+        root = logging.getLogger()
+        for h in root.handlers:
+            if isinstance(h, logging.StreamHandler):
+                h.stream = _sys.stderr  # type: ignore[attr-defined]
+    logger.debug("router args: %s", vars(args))
     start = _load_start_payload(args)
 
     # Map to contracts and validate
@@ -404,6 +460,7 @@ def main() -> None:
     v1_ok, v1_err = _ok_err_from_errors(validate_aip_to_asd(aip_to_asd))
 
     if args.mcp:
+        logger.info("running MCP mode")
         _run_mcp_mode(args=args, aip_to_asd=aip_to_asd, v1_ok=v1_ok, v1_err=v1_err)
         return
 
@@ -412,30 +469,6 @@ def main() -> None:
         return
 
     _run_local_chain(aip_to_asd=aip_to_asd, v1_ok=v1_ok, v1_err=v1_err)
-
-    # Default: local subprocess agents
-    r1 = run_agent(AIP, aip_to_asd)
-
-    asd_to_aiper = _to_asd_to_aiper(aip_to_asd["patient_id"], r1.get("insights"))
-    v2_ok, v2_err = _ok_err_from_errors(validate_asd_to_aiper(asd_to_aiper))
-
-    r2 = run_agent(ASD, asd_to_aiper)
-    r3 = run_agent(AIPER, asd_to_aiper)
-
-    print(  # noqa: T201
-        json.dumps(
-            {
-                "validation": {
-                    "aip_to_asd": {"ok": v1_ok, "error": v1_err},
-                    "asd_to_aiper": {"ok": v2_ok, "error": v2_err},
-                },
-                "aip": r1,
-                "asd": r2,
-                "aiper": r3,
-            },
-            indent=2,
-        ),
-    )
 
 
 if __name__ == "__main__":

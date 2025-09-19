@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from backend.src.services.aic_service import generate_structured_report
 from backend.src.mcp.validation import validate_clinician_report
+from backend.src.services.aic_service import generate_structured_report
 
 
 def test_generate_structured_report_validates() -> None:

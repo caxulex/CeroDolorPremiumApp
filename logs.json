@@ -1,0 +1,4 @@
+{"ts": "2025-09-16T13:48:02", "level": "DEBUG", "logger": "__main__", "message": "router args: {'payload': None, 'payload_file': None, 'mcp': False, 'mcp_base_url': 'http://localhost:3000', 'mcp_echo_path': '/echo', 'mcp_health_path': '/health', 'mcp_send': False, 'mas_demo': True, 'mas_mcp': False, 'include_aic': True, 'compact_output': True, 'logs_stderr': True}"}
+{"ts": "2025-09-16T13:48:02", "level": "INFO", "logger": "__main__", "message": "starting MAS demo include_aic=True mas_mcp=False"}
+{"ts": "2025-09-16T13:48:02", "level": "DEBUG", "logger": "backend.src.services.aic_service", "message": "structured_report patient=demo_patient patterns=1 trend=stable risk=0"}
+{"ts": "2025-09-16T13:48:02", "level": "INFO", "logger": "__main__", "message": "generated AIC report in 1 ms"}

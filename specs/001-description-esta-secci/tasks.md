@@ -390,3 +390,11 @@ Timestamp: 2025-09-15T10:25:47.7033220-05:00
 pwsh: PowerShell 7.5.3
 
 pwsh -File scripts/setup_coral_repos.ps1 -RecordVersions
+
+$env:LOG_JSON = "true"
+1..5 | ForEach-Object {
+  python -m backend.src.agents.router --mas-demo --include-aic --compact-output --logs-stderr
+} | Add-Content runs.ndjson
+
+$all = Get-Content runs.ndjson | ForEach-Object { $_ | ConvertFrom-Json }
+$all | Where-Object { -not $_.validation.patient_to_clinician.ok } | Measure-Object

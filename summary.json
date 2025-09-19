@@ -1,0 +1,19 @@
+{
+  "patients": 5,
+  "cycles_per_patient": 5,
+  "total_cycles_attempted": 25,
+  "total_cycles_completed": 25,
+  "errors": [],
+  "latency_sec": {
+    "min": 0.0077,
+    "max": 0.028,
+    "mean": 0.0133,
+    "p50": 0.0122,
+    "p95": 0.0231
+  },
+  "intervention_type_counts": {
+    "breathing": 8,
+    "mindfulness": 11,
+    "education": 6
+  }
+}

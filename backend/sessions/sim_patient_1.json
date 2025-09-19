@@ -1,0 +1,751 @@
+{
+  "patient_id": "sim_patient_1",
+  "events": [
+    {
+      "id": 1,
+      "ts": "2025-09-17T14:56:51.455094+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_1",
+          "level": 4,
+          "description": "rigidez moderada"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "ts": "2025-09-17T14:56:51.456094+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_1",
+          "mood": "positivo",
+          "sleep": "bueno"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "ts": "2025-09-17T14:56:51.457351+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 4,
+      "ts": "2025-09-17T14:56:51.459367+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Haz una pausa breve: 2 minutos de respiración nasal + estiramiento suave de cuello y hombros.",
+        "intervention_type": "mixed",
+        "details": {
+          "rationale": "Fallback genérico"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "ts": "2025-09-17T14:56:51.461359+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_1",
+          "ts": "2025-09-17T14:56:51.461359+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_1",
+              "level": 4,
+              "description": "rigidez moderada"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_1",
+              "mood": "positivo",
+              "sleep": "bueno"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Haz una pausa breve: 2 minutos de respiración nasal + estiramiento suave de cuello y hombros.",
+            "intervention_type": "mixed",
+            "details": {
+              "rationale": "Fallback genérico"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "ts": "2025-09-17T16:52:44.466926+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_1",
+          "level": 4,
+          "description": "molestia articular leve"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "ts": "2025-09-17T16:52:44.466926+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_1",
+          "mood": "irritable",
+          "sleep": "malo"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "ts": "2025-09-17T16:52:44.477172+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 9,
+      "ts": "2025-09-17T16:52:44.479426+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "ts": "2025-09-17T16:52:44.480420+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_1",
+          "ts": "2025-09-17T16:52:44.480420+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_1",
+              "level": 4,
+              "description": "molestia articular leve"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_1",
+              "mood": "irritable",
+              "sleep": "malo"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "ts": "2025-09-17T16:52:44.483422+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_1",
+          "level": 2,
+          "description": "molestia articular leve"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "ts": "2025-09-17T16:52:44.485417+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_1",
+          "mood": "ansioso",
+          "sleep": "regular"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "ts": "2025-09-17T16:52:44.487419+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 14,
+      "ts": "2025-09-17T16:52:44.489418+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "ts": "2025-09-17T16:52:44.492402+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_1",
+          "ts": "2025-09-17T16:52:44.492402+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_1",
+              "level": 2,
+              "description": "molestia articular leve"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_1",
+              "mood": "ansioso",
+              "sleep": "regular"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "ts": "2025-09-17T16:54:40.315125+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_1",
+          "level": 6,
+          "description": "dolor lumbar suave"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "ts": "2025-09-17T16:54:40.317125+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_1",
+          "mood": "positivo",
+          "sleep": "malo"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "ts": "2025-09-17T16:54:40.317125+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 19,
+      "ts": "2025-09-17T16:54:40.324645+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+        "intervention_type": "breathing",
+        "details": {
+          "duration_min": 5,
+          "rationale": "Dolor alto o cambio brusco"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "ts": "2025-09-17T16:54:40.324645+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_1",
+          "ts": "2025-09-17T16:54:40.324645+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_1",
+              "level": 6,
+              "description": "dolor lumbar suave"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_1",
+              "mood": "positivo",
+              "sleep": "malo"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+            "intervention_type": "breathing",
+            "details": {
+              "duration_min": 5,
+              "rationale": "Dolor alto o cambio brusco"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "ts": "2025-09-17T16:54:40.324645+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_1",
+          "level": 8,
+          "description": "molestia articular leve"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "ts": "2025-09-17T16:54:40.334439+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_1",
+          "mood": "ansioso",
+          "sleep": "regular"
+        }
+      }
+    },
+    {
+      "id": 23,
+      "ts": "2025-09-17T16:54:40.337452+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 24,
+      "ts": "2025-09-17T16:54:40.340448+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+        "intervention_type": "breathing",
+        "details": {
+          "duration_min": 5,
+          "rationale": "Dolor alto o cambio brusco"
+        }
+      }
+    },
+    {
+      "id": 25,
+      "ts": "2025-09-17T16:54:40.343450+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_1",
+          "ts": "2025-09-17T16:54:40.342452+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_1",
+              "level": 8,
+              "description": "molestia articular leve"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_1",
+              "mood": "ansioso",
+              "sleep": "regular"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+            "intervention_type": "breathing",
+            "details": {
+              "duration_min": 5,
+              "rationale": "Dolor alto o cambio brusco"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 26,
+      "ts": "2025-09-17T16:54:40.345967+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_1",
+          "level": 6,
+          "description": "rigidez moderada"
+        }
+      }
+    },
+    {
+      "id": 27,
+      "ts": "2025-09-17T16:54:40.347962+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_1",
+          "mood": "deprimido",
+          "sleep": "bueno"
+        }
+      }
+    },
+    {
+      "id": 28,
+      "ts": "2025-09-17T16:54:40.351073+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 29,
+      "ts": "2025-09-17T16:54:40.354069+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "ts": "2025-09-17T16:54:40.356582+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_1",
+          "ts": "2025-09-17T16:54:40.356582+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_1",
+              "level": 6,
+              "description": "rigidez moderada"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_1",
+              "mood": "deprimido",
+              "sleep": "bueno"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 31,
+      "ts": "2025-09-17T16:54:40.359583+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_1",
+          "level": 4,
+          "description": "opresión difusa"
+        }
+      }
+    },
+    {
+      "id": 32,
+      "ts": "2025-09-17T16:54:40.362583+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_1",
+          "mood": "positivo",
+          "sleep": "malo"
+        }
+      }
+    },
+    {
+      "id": 33,
+      "ts": "2025-09-17T16:54:40.365096+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 34,
+      "ts": "2025-09-17T16:54:40.368396+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Prueba higiene de sueño: evita pantallas brillantes 30 min antes de dormir hoy.",
+        "intervention_type": "education",
+        "details": {
+          "topic": "sleep_hygiene",
+          "rationale": "Sueño deficiente reciente"
+        }
+      }
+    },
+    {
+      "id": 35,
+      "ts": "2025-09-17T16:54:40.371400+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_1",
+          "ts": "2025-09-17T16:54:40.371400+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_1",
+              "level": 4,
+              "description": "opresión difusa"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_1",
+              "mood": "positivo",
+              "sleep": "malo"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Prueba higiene de sueño: evita pantallas brillantes 30 min antes de dormir hoy.",
+            "intervention_type": "education",
+            "details": {
+              "topic": "sleep_hygiene",
+              "rationale": "Sueño deficiente reciente"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 36,
+      "ts": "2025-09-17T16:54:40.374393+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_1",
+          "level": 3,
+          "description": "molestia articular leve"
+        }
+      }
+    },
+    {
+      "id": 37,
+      "ts": "2025-09-17T16:54:40.376909+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_1",
+          "mood": "ansioso",
+          "sleep": "bueno"
+        }
+      }
+    },
+    {
+      "id": 38,
+      "ts": "2025-09-17T16:54:40.379910+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 39,
+      "ts": "2025-09-17T16:54:40.382908+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 40,
+      "ts": "2025-09-17T16:54:40.386436+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_1",
+          "ts": "2025-09-17T16:54:40.386436+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_1",
+              "level": 3,
+              "description": "molestia articular leve"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_1",
+              "mood": "ansioso",
+              "sleep": "bueno"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "created_ts": "2025-09-17T14:56:51.455094+00:00",
+    "updated_ts": "2025-09-17T16:54:40.386436+00:00"
+  }
+}

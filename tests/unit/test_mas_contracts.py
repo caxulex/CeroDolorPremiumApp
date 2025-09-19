@@ -3,8 +3,8 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 from backend.src.mcp.validation import (
-    validate_patient_to_clinician,
     validate_clinician_to_physio,
+    validate_patient_to_clinician,
     validate_physio_to_patient,
 )
 

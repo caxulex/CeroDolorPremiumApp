@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from backend.src.logging_config import get_logger
 from backend.src.mcp.validation import (
     validate_anonymized_data_bundle,
     validate_audit_log_entry,
@@ -18,6 +19,10 @@ from backend.src.services.data_wallet_service import (
     grant_consent_and_pay,
     mint_data_asset,
 )
+from backend.src.services.consent_service import has_consent
+from backend.src.utils.persistence import store
+
+logger = get_logger(__name__)
 
 
 def _ts() -> str:
@@ -27,7 +32,9 @@ def _ts() -> str:
 def _hash_data(obj: Any) -> str:
     # Deterministic anonymization surrogate
     data = json.dumps(obj, sort_keys=True, ensure_ascii=False).encode("utf-8")
-    return hashlib.sha256(data).hexdigest()
+    h = hashlib.sha256(data).hexdigest()
+    logger.debug("hash_data length=%d", len(data))
+    return h
 
 
 def _log_entry(actor: str, action: str, resource: str, details: dict[str, Any]) -> dict[str, Any]:
@@ -85,6 +92,13 @@ def fulfill_query_offline(
     if q_errs:
         return {"error": {"query": q_errs}}
 
+    # Verify consent for each requested field (simplified: same requester id) -> if missing, auto-deny
+    requester_id = str(query.get("requester_id") or query.get("requester") or "researcher")
+    missing = [f for f in query.get("requested_fields", []) if not has_consent(patient_id, f, requester_id)]
+    if missing:
+        store.append_event(patient_id, "research_denied", {"fields": missing, "requester": requester_id})
+        return {"error": {"consent": f"missing_consent_for:{','.join(missing)}"}}
+
     # Create/derive wallet and mint a data token for the anonymized payload
     wallet = create_patient_wallet(patient_id)
     address = wallet.get("address") if isinstance(wallet, dict) else None
@@ -139,9 +153,21 @@ def fulfill_query_offline(
     _append_audit(_log_entry("AP", "transfer", "nft", {"token_id": token_id}), audit_log_path)
     _append_audit(_log_entry("AI", "pay", "solana_micropayment", {"amount": comp}), audit_log_path)
 
-    return {
+    result = {
         "offer": offer,
         "bundle": bundle,
         "receipt": receipt,
         "audit_log": str(audit_log_path),
     }
+    # Persist granular events for UI history
+    store.append_event(patient_id, "research_offer", {"offer": offer})
+    store.append_event(patient_id, "research_bundle", {"bundle": bundle})
+    store.append_event(patient_id, "research_receipt", {"receipt": receipt})
+    logger.info(
+        "fulfilled query patient=%s fields=%d amount=%.4f token=%s",
+        patient_id,
+        len(bundle["fields"]),
+        comp,
+        token_id,
+    )
+    return result

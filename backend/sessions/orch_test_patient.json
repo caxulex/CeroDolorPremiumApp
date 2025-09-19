@@ -1,0 +1,136 @@
+{
+  "patient_id": "orch_test_patient",
+  "events": [
+    {
+      "id": 1,
+      "ts": "2025-09-17T11:54:38.978178+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "orch_test_patient",
+          "level": 7,
+          "description": "lumbar agudo"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "ts": "2025-09-17T11:54:38.979688+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "orch_test_patient",
+          "mood": "ansioso",
+          "sleep": "malo"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "ts": "2025-09-17T11:54:38.981946+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 4,
+      "ts": "2025-09-17T11:54:38.981946+00:00",
+      "type": "suggestion",
+      "data": {
+        "suggestion": "Try a 5-minute guided breathing exercise."
+      }
+    },
+    {
+      "id": 5,
+      "ts": "2025-09-17T11:54:38.981946+00:00",
+      "type": "clinician_report",
+      "data": {
+        "report": {
+          "patient_id": "orch_test_patient",
+          "period": "last_7_days",
+          "highlights": [
+            "Resumen semanal generado automáticamente."
+          ],
+          "trends": "stable",
+          "risk_flags": [],
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "adherence_summary": {
+            "medication": "unknown",
+            "checkins_completed": 0
+          },
+          "recommendations": [
+            "Considerar ejercicios de movilidad suave por la mañana."
+          ]
+        }
+      }
+    },
+    {
+      "id": 6,
+      "ts": "2025-09-17T11:54:38.990272+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "orch_test_patient",
+          "ts": "2025-09-17T11:54:38.990272+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "orch_test_patient",
+              "level": 7,
+              "description": "lumbar agudo"
+            },
+            "mood_sleep": {
+              "patient_id": "orch_test_patient",
+              "mood": "ansioso",
+              "sleep": "malo"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Try a 5-minute guided breathing exercise."
+          },
+          "aic": {
+            "report": {
+              "patient_id": "orch_test_patient",
+              "period": "last_7_days",
+              "highlights": [
+                "Resumen semanal generado automáticamente."
+              ],
+              "trends": "stable",
+              "risk_flags": [],
+              "patterns_detected": [
+                "placeholder"
+              ],
+              "adherence_summary": {
+                "medication": "unknown",
+                "checkins_completed": 0
+              },
+              "recommendations": [
+                "Considerar ejercicios de movilidad suave por la mañana."
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "created_ts": "2025-09-17T11:54:38.978178+00:00",
+    "updated_ts": "2025-09-17T11:54:38.990272+00:00"
+  }
+}

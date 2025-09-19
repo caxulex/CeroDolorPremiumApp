@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from backend.src.integrations.aiml_api import AIMLClient
 from backend.src.integrations.elevenlabs import ElevenLabsClient
 from backend.src.integrations.mistral import MistralClient
-from backend.src.integrations.aiml_api import AIMLClient
 
 
 def test_elevenlabs_offline_simulation(monkeypatch):

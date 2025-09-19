@@ -1,0 +1,698 @@
+{
+  "patient_id": "demo_patient",
+  "events": [
+    {
+      "id": 1,
+      "ts": "2025-09-16T19:58:37.512386+00:00",
+      "type": "start_checkin",
+      "data": {
+        "message": "Daily check-in initiated."
+      }
+    },
+    {
+      "id": 2,
+      "ts": "2025-09-16T19:58:39.491133+00:00",
+      "type": "start_checkin",
+      "data": {
+        "message": "Daily check-in initiated."
+      }
+    },
+    {
+      "id": 3,
+      "ts": "2025-09-16T19:58:40.449393+00:00",
+      "type": "start_checkin",
+      "data": {
+        "message": "Daily check-in initiated."
+      }
+    },
+    {
+      "id": 4,
+      "ts": "2025-09-16T19:58:41.263015+00:00",
+      "type": "start_checkin",
+      "data": {
+        "message": "Daily check-in initiated."
+      }
+    },
+    {
+      "id": 5,
+      "ts": "2025-09-16T19:58:54.800734+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "demo_patient",
+          "level": 5,
+          "description": "punzante en la espalda baja"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "ts": "2025-09-16T19:58:54.802734+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "demo_patient",
+          "mood": "ansioso",
+          "sleep": "mal"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "ts": "2025-09-16T19:58:54.805265+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 8,
+      "ts": "2025-09-16T19:58:54.808909+00:00",
+      "type": "suggestion",
+      "data": {
+        "suggestion": "Try a 5-minute guided breathing exercise."
+      }
+    },
+    {
+      "id": 9,
+      "ts": "2025-09-16T19:58:54.812988+00:00",
+      "type": "feedback",
+      "data": {
+        "feedback": "Empathetic feedback provided."
+      }
+    },
+    {
+      "id": 10,
+      "ts": "2025-09-16T19:59:23.021803+00:00",
+      "type": "start_checkin",
+      "data": {
+        "message": "Daily check-in initiated."
+      }
+    },
+    {
+      "id": 11,
+      "ts": "2025-09-16T19:59:25.121335+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "demo_patient",
+          "level": 9,
+          "description": "punzante en la espalda baja"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "ts": "2025-09-16T19:59:25.125338+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "demo_patient",
+          "mood": "ansioso",
+          "sleep": "mal"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "ts": "2025-09-16T19:59:25.127337+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 14,
+      "ts": "2025-09-16T19:59:25.131401+00:00",
+      "type": "suggestion",
+      "data": {
+        "suggestion": "Try a 5-minute guided breathing exercise."
+      }
+    },
+    {
+      "id": 15,
+      "ts": "2025-09-16T19:59:25.135400+00:00",
+      "type": "feedback",
+      "data": {
+        "feedback": "Empathetic feedback provided."
+      }
+    },
+    {
+      "id": 16,
+      "ts": "2025-09-16T20:01:35.869432+00:00",
+      "type": "start_checkin",
+      "data": {
+        "message": "Daily check-in initiated."
+      }
+    },
+    {
+      "id": 17,
+      "ts": "2025-09-16T20:06:18.347706+00:00",
+      "type": "start_checkin",
+      "data": {
+        "message": "Daily check-in initiated."
+      }
+    },
+    {
+      "id": 18,
+      "ts": "2025-09-16T22:10:16.512650+00:00",
+      "type": "start_checkin",
+      "data": {
+        "message": "Daily check-in initiated."
+      }
+    },
+    {
+      "id": 19,
+      "ts": "2025-09-16T22:10:20.835589+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "demo_patient",
+          "level": 5,
+          "description": "punzante en la espalda baja"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "ts": "2025-09-16T22:10:20.839097+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "demo_patient",
+          "mood": "ansioso",
+          "sleep": "mal"
+        }
+      }
+    },
+    {
+      "id": 21,
+      "ts": "2025-09-16T22:10:20.843631+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 22,
+      "ts": "2025-09-16T22:10:20.848722+00:00",
+      "type": "suggestion",
+      "data": {
+        "suggestion": "Try a 5-minute guided breathing exercise."
+      }
+    },
+    {
+      "id": 23,
+      "ts": "2025-09-16T22:10:20.851735+00:00",
+      "type": "feedback",
+      "data": {
+        "feedback": "Empathetic feedback provided."
+      }
+    },
+    {
+      "id": 24,
+      "ts": "2025-09-16T22:10:20.863611+00:00",
+      "type": "analytics_snapshot",
+      "data": {
+        "snapshot": {
+          "pain": {
+            "count": 3,
+            "last": 5,
+            "mean_last_3": 6.333,
+            "mean_last_7": 6.333,
+            "delta_last": -4,
+            "pct_change_last": -44.444,
+            "zscore_last": -0.577,
+            "anomaly": true,
+            "severity_trend": "flat"
+          },
+          "weekly": {
+            "2025-W38": {
+              "count": 3,
+              "avg": 6.33,
+              "min": 5,
+              "max": 9,
+              "delta_vs_prev": null
+            }
+          },
+          "correlations": {
+            "count": 3,
+            "pain_vs_mood": 0.5,
+            "pain_vs_sleep": 0.5,
+            "scale_notes": {
+              "mood_map": {
+                "feliz": 5,
+                "contento": 4,
+                "neutral": 3,
+                "ansioso": 2,
+                "triste": 1,
+                "deprimido": 0
+              },
+              "sleep_map": {
+                "excelente": 5,
+                "bien": 4,
+                "normal": 3,
+                "regular": 2,
+                "mal": 1,
+                "terrible": 0
+              },
+              "interpretation": "Valores cercanos a ±1 sugieren correlación lineal fuerte (exploratorio, no diagnóstico)."
+            }
+          },
+          "correlation_ci": {
+            "r": 0.5,
+            "low": 0.5,
+            "high": 1.0,
+            "alpha": 0.05
+          },
+          "anomalies": [
+            {
+              "event_index": 10,
+              "pain": 9,
+              "mood": "ansioso",
+              "sleep": "mal",
+              "tags": [
+                "high_pain_with_poor_recovery",
+                "sudden_jump_with_context"
+              ],
+              "ts": "2025-09-16T19:59:25.121335+00:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 25,
+      "ts": "2025-09-17T11:55:15.655658+00:00",
+      "type": "mas_demo_output",
+      "data": {
+        "raw": {
+          "validation": {
+            "patient_to_clinician": {
+              "ok": true,
+              "error": null
+            },
+            "clinician_to_physio": {
+              "ok": true,
+              "error": null
+            },
+            "physio_to_patient": {
+              "ok": true,
+              "error": null
+            },
+            "clinician_report": {
+              "ok": true,
+              "error": null
+            }
+          },
+          "patient": {
+            "message_type": "patient_report",
+            "patient_id": "demo_patient",
+            "timestamp": "2025-09-17T11:55:15.617029+00:00",
+            "patient_report": {
+              "pain_level": 5,
+              "description": "punzante en la espalda baja",
+              "mood": "ansioso",
+              "sleep_quality": "regular"
+            }
+          },
+          "clinician": {
+            "message_type": "clinical_request",
+            "patient_id": "demo_patient",
+            "timestamp": "2025-09-17T11:55:15.617029+00:00",
+            "clinical_request": {
+              "goal": "reduce_pain_and_increase_mobility",
+              "constraints": [
+                "avoid_overexertion",
+                "pain_level<= 5"
+              ],
+              "insights": [
+                "daytime_pain_spikes",
+                "sleep_variability"
+              ]
+            }
+          },
+          "physio": {
+            "message_type": "exercise_plan",
+            "patient_id": "demo_patient",
+            "timestamp": "2025-09-17T11:55:15.617029+00:00",
+            "exercise_plan": {
+              "items": [
+                {
+                  "name": "gentle_stretching",
+                  "repetitions": 5,
+                  "frequency_per_day": 2,
+                  "notes": "slow, controlled"
+                },
+                {
+                  "name": "short_walk",
+                  "repetitions": 1,
+                  "frequency_per_day": 1,
+                  "notes": "5-10 minutes"
+                }
+              ]
+            }
+          },
+          "timings_ms": {
+            "patient_construction": 0,
+            "clinician_construction": 0,
+            "physio_construction": 0
+          },
+          "aic_report": {
+            "patient_id": "demo_patient",
+            "period": "last_7_days",
+            "highlights": [
+              "Resumen semanal generado automáticamente."
+            ],
+            "trends": "stable",
+            "risk_flags": [],
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "adherence_summary": {
+              "medication": "unknown",
+              "checkins_completed": 0
+            },
+            "recommendations": [
+              "Considerar ejercicios de movilidad suave por la mañana."
+            ]
+          },
+          "aic_meta": {
+            "duration_ms": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 26,
+      "ts": "2025-09-17T11:55:31.665401+00:00",
+      "type": "clinician_report",
+      "data": {
+        "report": {
+          "patient_id": "demo_patient",
+          "period": "last_7_days",
+          "highlights": [
+            "Resumen semanal generado automáticamente."
+          ],
+          "trends": "stable",
+          "risk_flags": [],
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "adherence_summary": {
+            "medication": "unknown",
+            "checkins_completed": 0
+          },
+          "recommendations": [
+            "Considerar ejercicios de movilidad suave por la mañana."
+          ]
+        },
+        "auto": true
+      }
+    },
+    {
+      "id": 27,
+      "ts": "2025-09-17T11:56:32.495993+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "demo_patient",
+          "level": 5,
+          "description": "dolor lumbar"
+        }
+      }
+    },
+    {
+      "id": 28,
+      "ts": "2025-09-17T11:56:32.499506+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "demo_patient",
+          "mood": "neutral",
+          "sleep": "regular"
+        }
+      }
+    },
+    {
+      "id": 29,
+      "ts": "2025-09-17T11:56:32.503506+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 30,
+      "ts": "2025-09-17T11:56:32.508022+00:00",
+      "type": "suggestion",
+      "data": {
+        "suggestion": "Try a 5-minute guided breathing exercise."
+      }
+    },
+    {
+      "id": 31,
+      "ts": "2025-09-17T11:56:32.512235+00:00",
+      "type": "clinician_report",
+      "data": {
+        "report": {
+          "patient_id": "demo_patient",
+          "period": "last_7_days",
+          "highlights": [
+            "Resumen semanal generado automáticamente."
+          ],
+          "trends": "stable",
+          "risk_flags": [],
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "adherence_summary": {
+            "medication": "unknown",
+            "checkins_completed": 0
+          },
+          "recommendations": [
+            "Considerar ejercicios de movilidad suave por la mañana."
+          ]
+        }
+      }
+    },
+    {
+      "id": 32,
+      "ts": "2025-09-17T11:56:32.515237+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "demo_patient",
+          "ts": "2025-09-17T11:56:32.515237+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "demo_patient",
+              "level": 5,
+              "description": "dolor lumbar"
+            },
+            "mood_sleep": {
+              "patient_id": "demo_patient",
+              "mood": "neutral",
+              "sleep": "regular"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Try a 5-minute guided breathing exercise."
+          },
+          "aic": {
+            "report": {
+              "patient_id": "demo_patient",
+              "period": "last_7_days",
+              "highlights": [
+                "Resumen semanal generado automáticamente."
+              ],
+              "trends": "stable",
+              "risk_flags": [],
+              "patterns_detected": [
+                "placeholder"
+              ],
+              "adherence_summary": {
+                "medication": "unknown",
+                "checkins_completed": 0
+              },
+              "recommendations": [
+                "Considerar ejercicios de movilidad suave por la mañana."
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 33,
+      "ts": "2025-09-17T12:40:29.223451+00:00",
+      "type": "start_checkin",
+      "data": {
+        "message": "Daily check-in initiated."
+      }
+    },
+    {
+      "id": 34,
+      "ts": "2025-09-17T12:40:38.890375+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "demo_patient",
+          "level": 5,
+          "description": "punzante en la espalda baja"
+        }
+      }
+    },
+    {
+      "id": 35,
+      "ts": "2025-09-17T12:40:38.894372+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "demo_patient",
+          "mood": "ansioso",
+          "sleep": "mal"
+        }
+      }
+    },
+    {
+      "id": 36,
+      "ts": "2025-09-17T12:40:38.898897+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 37,
+      "ts": "2025-09-17T12:40:38.904075+00:00",
+      "type": "suggestion",
+      "data": {
+        "suggestion": "Try a 5-minute guided breathing exercise."
+      }
+    },
+    {
+      "id": 38,
+      "ts": "2025-09-17T12:40:38.908069+00:00",
+      "type": "feedback",
+      "data": {
+        "feedback": "Empathetic feedback provided."
+      }
+    },
+    {
+      "id": 39,
+      "ts": "2025-09-17T12:40:38.932291+00:00",
+      "type": "analytics_snapshot",
+      "data": {
+        "snapshot": {
+          "_cache_hit": false,
+          "pain": {
+            "count": 5,
+            "last": 5,
+            "mean_last_3": 5.0,
+            "mean_last_7": 5.8,
+            "delta_last": 0,
+            "pct_change_last": 0.0,
+            "zscore_last": -0.447,
+            "anomaly": false,
+            "severity_trend": "flat"
+          },
+          "weekly": {
+            "2025-W38": {
+              "count": 5,
+              "avg": 5.8,
+              "min": 5,
+              "max": 9,
+              "delta_vs_prev": null
+            }
+          },
+          "correlations": {
+            "count": 5,
+            "pain_vs_mood": 0.1021,
+            "pain_vs_sleep": 0.0,
+            "scale_notes": {
+              "mood_map": {
+                "feliz": 5,
+                "contento": 4,
+                "neutral": 3,
+                "ansioso": 2,
+                "triste": 1,
+                "deprimido": 0
+              },
+              "sleep_map": {
+                "excelente": 5,
+                "bien": 4,
+                "normal": 3,
+                "regular": 2,
+                "mal": 1,
+                "terrible": 0
+              },
+              "interpretation": "Valores cercanos a ±1 sugieren correlación lineal fuerte (exploratorio, no diagnóstico)."
+            }
+          },
+          "correlation_ci": {
+            "r": 0.1021,
+            "low": -1.0,
+            "high": 0.6667,
+            "alpha": 0.05
+          },
+          "anomalies": [
+            {
+              "event_index": 10,
+              "pain": 9,
+              "mood": "ansioso",
+              "sleep": "mal",
+              "tags": [
+                "high_pain_with_poor_recovery",
+                "sudden_jump_with_context"
+              ],
+              "ts": "2025-09-16T19:59:25.121335+00:00"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "meta": {
+    "created_ts": "2025-09-16T19:58:33.467174+00:00",
+    "updated_ts": "2025-09-17T12:40:38.932291+00:00"
+  }
+}

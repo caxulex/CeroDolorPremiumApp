@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from backend.src.services.research_network_service import evaluate_query_against_patient, fulfill_query_offline
+from backend.src.services.research_network_service import (
+    evaluate_query_against_patient,
+    fulfill_query_offline,
+)
 
 
 def test_offline_flow_accepts_and_fulfills(tmp_path: Path) -> None:

@@ -1,12 +1,14 @@
 import json
+import os
+
 import jsonschema
 import pytest
-import os
+
 
 def test_aip_to_asd_contract():
     # Load schema
     schema_path = os.path.join(os.path.dirname(__file__), '..', '..', 'specs', '001-description-esta-secci', 'contracts', 'aip_to_asd.json')
-    with open(schema_path, 'r') as f:
+    with open(schema_path) as f:
         schema = json.load(f)
     
     # Sample valid message

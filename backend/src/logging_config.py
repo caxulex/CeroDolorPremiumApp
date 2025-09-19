@@ -7,11 +7,13 @@ Does not alter existing code paths; importing is optional.
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 
 _LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 _CONFIGURED = False
+_USE_JSON = os.getenv("LOG_JSON", "false").lower() == "true"
 
 
 def _configure_root() -> None:
@@ -20,11 +22,26 @@ def _configure_root() -> None:
         return
     level = getattr(logging, _LEVEL, logging.INFO)
     handler = logging.StreamHandler()
-    formatter = logging.Formatter(
-        "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        datefmt="%H:%M:%S",
-    )
-    handler.setFormatter(formatter)
+    if _USE_JSON:
+        class _JsonFormatter(logging.Formatter):  # noqa: D401 - internal helper
+            def format(self, record: logging.LogRecord) -> str:  # noqa: D401
+                base = {
+                    "ts": self.formatTime(record, datefmt="%Y-%m-%dT%H:%M:%S"),
+                    "level": record.levelname,
+                    "logger": record.name,
+                    "message": record.getMessage(),
+                }
+                if record.exc_info:
+                    base["exc_type"] = record.exc_info[0].__name__  # type: ignore[index]
+                return json.dumps(base, ensure_ascii=False)
+
+        handler.setFormatter(_JsonFormatter())
+    else:
+        formatter = logging.Formatter(
+            "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+            datefmt="%H:%M:%S",
+        )
+        handler.setFormatter(formatter)
     root = logging.getLogger()
     root.setLevel(level)
     # Avoid duplicate handlers if re-imported

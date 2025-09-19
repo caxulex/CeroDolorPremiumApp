@@ -1,25 +1,26 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 import pytest
 
-from backend.src.models import Patient, PainRecord, Clinician, Agent, AgentType
+from backend.src.models import Agent, AgentType, Clinician, PainRecord, Patient
 
 
 def test_pain_record_valid_range() -> None:
-    rec = PainRecord(datetime.now(timezone.utc), 5, description="ok")
+    rec = PainRecord(datetime.now(UTC), 5, description="ok")
     assert rec.pain_level == 5
 
 
 @pytest.mark.parametrize("level", [0, 11])
 def test_pain_record_invalid_range(level: int) -> None:
     with pytest.raises(ValueError):
-        PainRecord(datetime.now(timezone.utc), level)
+        PainRecord(datetime.now(UTC), level)
 
 
 def test_patient_add_pain_record() -> None:
     p = Patient("p1", "Alice")
-    rec = PainRecord(datetime.now(timezone.utc), 3)
+    rec = PainRecord(datetime.now(UTC), 3)
     p.add_pain_record(rec)
     assert p.pain_history[-1] is rec
 

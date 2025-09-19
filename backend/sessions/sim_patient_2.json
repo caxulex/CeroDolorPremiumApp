@@ -1,0 +1,660 @@
+{
+  "patient_id": "sim_patient_2",
+  "events": [
+    {
+      "id": 1,
+      "ts": "2025-09-17T16:52:44.494524+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_2",
+          "level": 4,
+          "description": "dolor lumbar suave"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "ts": "2025-09-17T16:52:44.495525+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_2",
+          "mood": "deprimido",
+          "sleep": "regular"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "ts": "2025-09-17T16:52:44.497526+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 4,
+      "ts": "2025-09-17T16:52:44.499536+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "ts": "2025-09-17T16:52:44.501526+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_2",
+          "ts": "2025-09-17T16:52:44.501526+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_2",
+              "level": 4,
+              "description": "dolor lumbar suave"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_2",
+              "mood": "deprimido",
+              "sleep": "regular"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "ts": "2025-09-17T16:52:44.502525+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_2",
+          "level": 3,
+          "description": "opresión difusa"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "ts": "2025-09-17T16:52:44.504528+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_2",
+          "mood": "deprimido",
+          "sleep": "malo"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "ts": "2025-09-17T16:52:44.506525+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 9,
+      "ts": "2025-09-17T16:52:44.507523+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "ts": "2025-09-17T16:52:44.510725+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_2",
+          "ts": "2025-09-17T16:52:44.509639+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_2",
+              "level": 3,
+              "description": "opresión difusa"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_2",
+              "mood": "deprimido",
+              "sleep": "malo"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "ts": "2025-09-17T16:54:40.402440+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_2",
+          "level": 5,
+          "description": "rigidez moderada"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "ts": "2025-09-17T16:54:40.404443+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_2",
+          "mood": "deprimido",
+          "sleep": "regular"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "ts": "2025-09-17T16:54:40.406964+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 14,
+      "ts": "2025-09-17T16:54:40.408963+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "ts": "2025-09-17T16:54:40.411965+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_2",
+          "ts": "2025-09-17T16:54:40.410961+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_2",
+              "level": 5,
+              "description": "rigidez moderada"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_2",
+              "mood": "deprimido",
+              "sleep": "regular"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "ts": "2025-09-17T16:54:40.413961+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_2",
+          "level": 5,
+          "description": "rigidez moderada"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "ts": "2025-09-17T16:54:40.415961+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_2",
+          "mood": "ansioso",
+          "sleep": "bueno"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "ts": "2025-09-17T16:54:40.418237+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 19,
+      "ts": "2025-09-17T16:54:40.420238+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "ts": "2025-09-17T16:54:40.423232+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_2",
+          "ts": "2025-09-17T16:54:40.423232+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_2",
+              "level": 5,
+              "description": "rigidez moderada"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_2",
+              "mood": "ansioso",
+              "sleep": "bueno"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "ts": "2025-09-17T16:54:40.425237+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_2",
+          "level": 7,
+          "description": "opresión difusa"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "ts": "2025-09-17T16:54:40.427755+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_2",
+          "mood": "irritable",
+          "sleep": "bueno"
+        }
+      }
+    },
+    {
+      "id": 23,
+      "ts": "2025-09-17T16:54:40.429752+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 24,
+      "ts": "2025-09-17T16:54:40.432755+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+        "intervention_type": "breathing",
+        "details": {
+          "duration_min": 5,
+          "rationale": "Dolor alto o cambio brusco"
+        }
+      }
+    },
+    {
+      "id": 25,
+      "ts": "2025-09-17T16:54:40.434753+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_2",
+          "ts": "2025-09-17T16:54:40.434753+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_2",
+              "level": 7,
+              "description": "opresión difusa"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_2",
+              "mood": "irritable",
+              "sleep": "bueno"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+            "intervention_type": "breathing",
+            "details": {
+              "duration_min": 5,
+              "rationale": "Dolor alto o cambio brusco"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 26,
+      "ts": "2025-09-17T16:54:40.438278+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_2",
+          "level": 3,
+          "description": "sensación punzante en cuello"
+        }
+      }
+    },
+    {
+      "id": 27,
+      "ts": "2025-09-17T16:54:40.441276+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_2",
+          "mood": "ansioso",
+          "sleep": "regular"
+        }
+      }
+    },
+    {
+      "id": 28,
+      "ts": "2025-09-17T16:54:40.450039+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 29,
+      "ts": "2025-09-17T16:54:40.454042+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+        "intervention_type": "breathing",
+        "details": {
+          "duration_min": 5,
+          "rationale": "Dolor alto o cambio brusco"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "ts": "2025-09-17T16:54:40.456561+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_2",
+          "ts": "2025-09-17T16:54:40.456561+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_2",
+              "level": 3,
+              "description": "sensación punzante en cuello"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_2",
+              "mood": "ansioso",
+              "sleep": "regular"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+            "intervention_type": "breathing",
+            "details": {
+              "duration_min": 5,
+              "rationale": "Dolor alto o cambio brusco"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 31,
+      "ts": "2025-09-17T16:54:40.461573+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_2",
+          "level": 6,
+          "description": "opresión difusa"
+        }
+      }
+    },
+    {
+      "id": 32,
+      "ts": "2025-09-17T16:54:40.463572+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_2",
+          "mood": "positivo",
+          "sleep": "bueno"
+        }
+      }
+    },
+    {
+      "id": 33,
+      "ts": "2025-09-17T16:54:40.466830+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 34,
+      "ts": "2025-09-17T16:54:40.470079+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+        "intervention_type": "breathing",
+        "details": {
+          "duration_min": 5,
+          "rationale": "Dolor alto o cambio brusco"
+        }
+      }
+    },
+    {
+      "id": 35,
+      "ts": "2025-09-17T16:54:40.473081+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_2",
+          "ts": "2025-09-17T16:54:40.473081+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_2",
+              "level": 6,
+              "description": "opresión difusa"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_2",
+              "mood": "positivo",
+              "sleep": "bueno"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+            "intervention_type": "breathing",
+            "details": {
+              "duration_min": 5,
+              "rationale": "Dolor alto o cambio brusco"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "created_ts": "2025-09-17T16:52:44.494524+00:00",
+    "updated_ts": "2025-09-17T16:54:40.473081+00:00"
+  }
+}

@@ -1,0 +1,15 @@
+# Provisional lock file (manual). Generado para mejorar reproducibilidad.
+# NOTA: Actualizar mediante revisión periódica + dependabot. Evitar fijar versiones inseguras conocidas.
+# Revisar CVEs antes de subir cambios que alteren versiones mayores.
+
+langchain==0.2.15        # pin aproximado (verificar compatibilidad en actualizaciones)
+elevenlabs==1.7.0        # SDK voz
+mistralai==0.4.1         # Cliente Mistral
+streamlit==1.37.1        # UI
+streamlit-webrtc==0.47.1 # WebRTC integración
+jsonschema==4.23.0       # Validación
+requests==2.32.3         # HTTP cliente
+pytest==8.3.2            # Tests
+ruff==0.5.7              # Linter
+# cryptography opcional para Fernet (si no instalado, documentar):
+cryptography==43.0.1     # Export cifrado (añadir a extras si se formaliza)

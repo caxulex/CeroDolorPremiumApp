@@ -1,6 +1,6 @@
 import os
-import pytest
 
+import pytest
 
 require_network = pytest.mark.skipif(
     os.getenv("USE_NETWORK", "false").lower() != "true",

@@ -1,0 +1,93 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cerodolor-premium"
+version = "0.1.0"
+description = "CeroDolor Premium App - adaptive pain management assistant"
+authors = [ { name = "CeroDolor Team" } ]
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+keywords = ["pain", "health", "streamlit", "langchain", "analytics"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Intended Audience :: Healthcare Industry",
+  "License :: Other/Proprietary License",
+  "Operating System :: OS Independent"
+]
+
+# Core runtime dependencies (keep minimal; dev-only tools separated)
+# NOTE: Some libraries (langchain, elevenlabs, mistralai) may be optional at runtime.
+# Provide extras for optional network/LLM features.
+[project.optional-dependencies]
+full = [
+  "langchain",
+  "elevenlabs",
+  "mistralai",
+  "streamlit-webrtc",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# Enable a focused rule set; expand gradually.
+select = [
+  "E",   # pycodestyle errors
+  "F",   # pyflakes
+  "I",   # isort
+  "B",   # flake8-bugbear
+  "UP",  # pyupgrade
+  "S",   # security (bandit rules subset)
+]
+ignore = [
+  "E501",  # handled via line-length; allow slight flexibility
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["backend", "frontend", "tests"]
+force-single-line = false
+combine-as-imports = true
+
+[tool.ruff.per-file-ignores]
+# Tests can be more flexible
+"tests/*" = ["S101", "D103"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = false
+warn_unreachable = true
+ignore_missing_imports = false
+strict_optional = true
+check_untyped_defs = true
+no_implicit_reexport = true
+show_error_codes = true
+
+[tool.pytest.ini_options]
+addopts = "-q"
+python_files = ["test_*.py"]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["backend", "frontend"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.cerodolor]
+offline_default = true
+
+# (Optional future) Bandit configuration example:
+# [tool.bandit]
+# exclude = ["tests"]
+# severity = "LOW"
+# confidence = "LOW"

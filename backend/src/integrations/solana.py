@@ -7,6 +7,10 @@ from dataclasses import dataclass
 from json import loads as json_loads
 from typing import Any
 
+from backend.src.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 
 @dataclass(frozen=True)
 class SolanaConfig:
@@ -43,7 +47,9 @@ class SolanaClient:
 
     def send_micropayment(self, to_address: str, amount_sol: float) -> dict[str, Any]:
         if not self._use_network:
-            return {"signature": f"SIM_SIG_{self._det_sig(to_address, str(amount_sol))[:16]}", "amount_sol": amount_sol}
+            sig = f"SIM_SIG_{self._det_sig(to_address, str(amount_sol))[:16]}"
+            logger.debug("solana offline micropayment to=%s amount=%.4f", to_address, amount_sol)
+            return {"signature": sig, "amount_sol": amount_sol}
         # Minimal placeholder network call: getLatestBlockhash to prove RPC, then dummy-sign
         try:
             import requests
@@ -73,6 +79,7 @@ class SolanaClient:
         except Exception as e:  # noqa: BLE001
             return {"error": "exception", "message": str(e)[:500]}
         else:
+            logger.info("solana network micropayment blockhash_present=%s", bool(result.get("blockhash")))
             return result
 
     def get_latest_blockhash(self) -> dict[str, Any]:
@@ -81,7 +88,9 @@ class SolanaClient:
         Returns offline deterministic data otherwise.
         """
         if not self._use_network:
-            return {"latest_blockhash": self._det_sig("offline", "bh")[:32]}
+            bh = self._det_sig("offline", "bh")[:32]
+            logger.debug("solana offline blockhash")
+            return {"latest_blockhash": bh}
         try:
             import requests
 

@@ -1,0 +1,175 @@
+{
+  "patient_id": "demo_patient_smoke",
+  "events": [
+    {
+      "id": 1,
+      "ts": "2025-09-17T13:37:25.077710+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "demo_patient_smoke",
+          "level": 5,
+          "description": "molestia lumbar inicial"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "ts": "2025-09-17T13:37:25.081012+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "demo_patient_smoke",
+          "mood": "ok",
+          "sleep": "regular"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "ts": "2025-09-17T13:37:25.082525+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 4,
+      "ts": "2025-09-17T13:37:25.084539+00:00",
+      "type": "suggestion",
+      "data": {
+        "suggestion": "Try a 5-minute guided breathing exercise."
+      }
+    },
+    {
+      "id": 5,
+      "ts": "2025-09-17T13:37:25.085542+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "demo_patient_smoke",
+          "ts": "2025-09-17T13:37:25.085542+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "demo_patient_smoke",
+              "level": 5,
+              "description": "molestia lumbar inicial"
+            },
+            "mood_sleep": {
+              "patient_id": "demo_patient_smoke",
+              "mood": "ok",
+              "sleep": "regular"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Try a 5-minute guided breathing exercise."
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "ts": "2025-09-17T13:37:25.087541+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "demo_patient_smoke",
+          "level": 7,
+          "description": "aumento despues de actividad"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "ts": "2025-09-17T13:37:25.089539+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "demo_patient_smoke",
+          "mood": "cansado",
+          "sleep": "mal"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "ts": "2025-09-17T13:37:25.091543+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 9,
+      "ts": "2025-09-17T13:37:25.092542+00:00",
+      "type": "suggestion",
+      "data": {
+        "suggestion": "Try a 5-minute guided breathing exercise."
+      }
+    },
+    {
+      "id": 10,
+      "ts": "2025-09-17T13:37:25.095881+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "demo_patient_smoke",
+          "ts": "2025-09-17T13:37:25.095881+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "demo_patient_smoke",
+              "level": 7,
+              "description": "aumento despues de actividad"
+            },
+            "mood_sleep": {
+              "patient_id": "demo_patient_smoke",
+              "mood": "cansado",
+              "sleep": "mal"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Try a 5-minute guided breathing exercise."
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "created_ts": "2025-09-17T13:37:25.077710+00:00",
+    "updated_ts": "2025-09-17T13:37:25.095881+00:00"
+  }
+}

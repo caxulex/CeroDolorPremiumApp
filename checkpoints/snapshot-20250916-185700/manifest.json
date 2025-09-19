@@ -1,0 +1,23 @@
+{
+  "snapshot": "snapshot-20250916-185700",
+  "created_utc": "2025-09-16T18:57:00Z",
+  "commit": "be67d74",
+  "branch": "001-description-esta-secci",
+  "description": "Post enum sanitizer addition; router uses generic sanitize_enum; normalization tests added.",
+  "components": {
+    "utils": ["backend/src/utils/normalization.py"],
+    "router": ["backend/src/agents/router.py"],
+    "tests": ["tests/unit/test_normalization.py"],
+    "contracts": ["contracts/patient_to_clinician.json", "contracts/aip_to_asd.json"],
+    "perf_tests": ["tests/perf/test_latency_budget.py", "tests/perf/test_latency_aic_budget.py"],
+    "logging": ["backend/src/logging_config.py"],
+    "specs": ["specs/001-description-esta-secci/tasks.md"]
+  },
+  "notes": [
+    "Validation now passes for patient_to_clinician via sanitized sleep_quality.",
+    "Added generic enum sanitizer with alias + fallback.",
+    "Introduced unit tests covering sanitizer edge cases.",
+    "Router supports --compact-output and --logs-stderr for clean JSON pipelines.",
+    "Performance budgets enforced (MAS <3s, MAS+AIC <3.5s)."
+  ]
+}

@@ -1,0 +1,474 @@
+{
+  "patient_id": "sim_patient_3",
+  "events": [
+    {
+      "id": 1,
+      "ts": "2025-09-17T16:54:40.476595+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_3",
+          "level": 5,
+          "description": "sensación punzante en cuello"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "ts": "2025-09-17T16:54:40.477605+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_3",
+          "mood": "deprimido",
+          "sleep": "regular"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "ts": "2025-09-17T16:54:40.478606+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 4,
+      "ts": "2025-09-17T16:54:40.480606+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "ts": "2025-09-17T16:54:40.482606+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_3",
+          "ts": "2025-09-17T16:54:40.482606+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_3",
+              "level": 5,
+              "description": "sensación punzante en cuello"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_3",
+              "mood": "deprimido",
+              "sleep": "regular"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "ts": "2025-09-17T16:54:40.484609+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_3",
+          "level": 4,
+          "description": "rigidez moderada"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "ts": "2025-09-17T16:54:40.485607+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_3",
+          "mood": "neutral",
+          "sleep": "malo"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "ts": "2025-09-17T16:54:40.488133+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 9,
+      "ts": "2025-09-17T16:54:40.490371+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Prueba higiene de sueño: evita pantallas brillantes 30 min antes de dormir hoy.",
+        "intervention_type": "education",
+        "details": {
+          "topic": "sleep_hygiene",
+          "rationale": "Sueño deficiente reciente"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "ts": "2025-09-17T16:54:40.492911+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_3",
+          "ts": "2025-09-17T16:54:40.492911+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_3",
+              "level": 4,
+              "description": "rigidez moderada"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_3",
+              "mood": "neutral",
+              "sleep": "malo"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Prueba higiene de sueño: evita pantallas brillantes 30 min antes de dormir hoy.",
+            "intervention_type": "education",
+            "details": {
+              "topic": "sleep_hygiene",
+              "rationale": "Sueño deficiente reciente"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "ts": "2025-09-17T16:54:40.495017+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_3",
+          "level": 6,
+          "description": "sensación punzante en cuello"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "ts": "2025-09-17T16:54:40.497017+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_3",
+          "mood": "positivo",
+          "sleep": "malo"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "ts": "2025-09-17T16:54:40.499414+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 14,
+      "ts": "2025-09-17T16:54:40.501411+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Prueba higiene de sueño: evita pantallas brillantes 30 min antes de dormir hoy.",
+        "intervention_type": "education",
+        "details": {
+          "topic": "sleep_hygiene",
+          "rationale": "Sueño deficiente reciente"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "ts": "2025-09-17T16:54:40.503411+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_3",
+          "ts": "2025-09-17T16:54:40.503411+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_3",
+              "level": 6,
+              "description": "sensación punzante en cuello"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_3",
+              "mood": "positivo",
+              "sleep": "malo"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Prueba higiene de sueño: evita pantallas brillantes 30 min antes de dormir hoy.",
+            "intervention_type": "education",
+            "details": {
+              "topic": "sleep_hygiene",
+              "rationale": "Sueño deficiente reciente"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "ts": "2025-09-17T16:54:40.505417+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_3",
+          "level": 7,
+          "description": "dolor lumbar suave"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "ts": "2025-09-17T16:54:40.507414+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_3",
+          "mood": "ansioso",
+          "sleep": "regular"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "ts": "2025-09-17T16:54:40.509769+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 19,
+      "ts": "2025-09-17T16:54:40.511776+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+        "intervention_type": "breathing",
+        "details": {
+          "duration_min": 5,
+          "rationale": "Dolor alto o cambio brusco"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "ts": "2025-09-17T16:54:40.514770+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_3",
+          "ts": "2025-09-17T16:54:40.514770+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_3",
+              "level": 7,
+              "description": "dolor lumbar suave"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_3",
+              "mood": "ansioso",
+              "sleep": "regular"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Realiza 5 minutos de respiración diafragmática lenta (4-2-6) en posición cómoda.",
+            "intervention_type": "breathing",
+            "details": {
+              "duration_min": 5,
+              "rationale": "Dolor alto o cambio brusco"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "ts": "2025-09-17T16:54:40.517283+00:00",
+      "type": "pain_registration",
+      "data": {
+        "pain": {
+          "patient_id": "sim_patient_3",
+          "level": 6,
+          "description": "opresión difusa"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "ts": "2025-09-17T16:54:40.519563+00:00",
+      "type": "mood_sleep",
+      "data": {
+        "mood_sleep": {
+          "patient_id": "sim_patient_3",
+          "mood": "deprimido",
+          "sleep": "bueno"
+        }
+      }
+    },
+    {
+      "id": 23,
+      "ts": "2025-09-17T16:54:40.521558+00:00",
+      "type": "insights",
+      "data": {
+        "insights": {
+          "patterns_detected": [
+            "placeholder"
+          ],
+          "trend_analysis": "stable",
+          "risk_flags": []
+        }
+      }
+    },
+    {
+      "id": 24,
+      "ts": "2025-09-17T16:54:40.524559+00:00",
+      "type": "intervention",
+      "data": {
+        "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+        "intervention_type": "mindfulness",
+        "details": {
+          "duration_min": 3,
+          "rationale": "Ánimo bajo detectado"
+        }
+      }
+    },
+    {
+      "id": 25,
+      "ts": "2025-09-17T16:54:40.526561+00:00",
+      "type": "orchestrated_cycle",
+      "data": {
+        "cycle": {
+          "patient_id": "sim_patient_3",
+          "ts": "2025-09-17T16:54:40.526561+00:00",
+          "aip": {
+            "message": "captured",
+            "pain": {
+              "patient_id": "sim_patient_3",
+              "level": 6,
+              "description": "opresión difusa"
+            },
+            "mood_sleep": {
+              "patient_id": "sim_patient_3",
+              "mood": "deprimido",
+              "sleep": "bueno"
+            }
+          },
+          "asd": {
+            "patterns_detected": [
+              "placeholder"
+            ],
+            "trend_analysis": "stable",
+            "risk_flags": []
+          },
+          "aiper": {
+            "suggestion": "Toma 3 minutos para un escaneo corporal breve y anota una cosa positiva de hoy.",
+            "intervention_type": "mindfulness",
+            "details": {
+              "duration_min": 3,
+              "rationale": "Ánimo bajo detectado"
+            }
+          },
+          "aic": {
+            "report": {}
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "created_ts": "2025-09-17T16:54:40.475083+00:00",
+    "updated_ts": "2025-09-17T16:54:40.526561+00:00"
+  }
+}

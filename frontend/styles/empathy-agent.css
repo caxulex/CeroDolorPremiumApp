@@ -1,0 +1,123 @@
+/* Empathy Agent Page – Aesthetic Enhancements (Non-destructive)
+   Only presentation; no logic changes. */
+
+:root {
+  --cd-bg: #F8F7F4;
+  --cd-surface: #FFFFFF;
+  --cd-surface-alt: #FCFCFA;
+  --cd-border: #E2E8F0;
+  --cd-border-strong: #CBD5E0;
+  --cd-text: #2D3748;
+  --cd-text-secondary: #718096;
+  --cd-text-muted: #A0AEC0;
+  --cd-accent: #DD6B20;
+  --cd-accent-hover: #C75F1C;
+  --cd-accent-active: #B45314;
+  --cd-success: #38A169;
+  --cd-success-bg: #E6F6ED;
+  --cd-focus-ring: #DD6B20;
+  --cd-focus-bg: rgba(221, 107, 32, 0.08);
+  --cd-shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+  --cd-shadow-md: 0 4px 6px -1px rgba(0,0,0,0.10), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --cd-shadow-focus: 0 0 0 4px rgba(221,107,32,0.25);
+  --cd-space-1: 0.25rem; --cd-space-2: 0.5rem; --cd-space-3: 0.75rem; --cd-space-4: 1rem; --cd-space-5: 1.25rem; --cd-space-6: 1.5rem; --cd-space-8: 2rem; --cd-space-10: 2.5rem;
+  --cd-radius-sm: 4px; --cd-radius: 8px; --cd-radius-lg: 14px; --cd-radius-pill: 999px;
+  --cd-ease: cubic-bezier(0.4, 0.14, 0.3, 1);
+  --cd-transition-fast: 120ms var(--cd-ease); --cd-transition: 240ms var(--cd-ease);
+  --cd-max-width: 1120px;
+  --cd-timeline-line: #E2E8F0;
+  --cd-timeline-dot: #DD6B20;
+  --cd-timeline-bg: #FFFFFF;
+  --cd-timeline-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.empathy-agent-page { background: var(--cd-bg); color: var(--cd-text); -webkit-font-smoothing: antialiased; padding: var(--cd-space-6) var(--cd-space-4) var(--cd-space-10); }
+.empathy-agent-page .cd-container { max-width: var(--cd-max-width); margin: 0 auto; width: 100%; }
+.empathy-agent-page h1, .empathy-agent-page h2, .empathy-agent-page h3 { font-weight:600; color: var(--cd-text); line-height:1.2; letter-spacing:-0.02em; }
+.empathy-agent-page h1 { font-size: clamp(1.9rem, 2.6vw, 2.4rem); margin:0 0 var(--cd-space-4); }
+.empathy-agent-page h2 { font-size: clamp(1.4rem,2vw,1.75rem); margin: var(--cd-space-8) 0 var(--cd-space-4); }
+.empathy-agent-page h3 { font-size:1.25rem; margin: var(--cd-space-6) 0 var(--cd-space-3); }
+.empathy-agent-page p { max-width:68ch; margin:0 0 var(--cd-space-4); color: var(--cd-text-secondary); }
+
+/* Streamlit-specific element refinements (non-invasive) */
+/* Target common container blocks (stExpander, stButton) via attribute selectors to avoid logic coupling */
+.empathy-agent-page [data-testid="stExpander"] { border-radius: var(--cd-radius); box-shadow: var(--cd-shadow-sm); border:1px solid var(--cd-border); background: var(--cd-surface); }
+.empathy-agent-page [data-testid="stExpander"]:hover { box-shadow: var(--cd-shadow-md); }
+
+/* Buttons: rely on Streamlit button rendered inside a div with role=button */
+.empathy-agent-page button[kind] { border-radius: var(--cd-radius-pill)!important; border:1px solid var(--cd-border)!important; box-shadow: var(--cd-shadow-sm)!important; transition: background-color var(--cd-transition), transform var(--cd-transition); }
+.empathy-agent-page button[kind]:hover { background: var(--cd-surface-alt)!important; transform: translateY(-1px); }
+.empathy-agent-page button[kind]:active { transform: translateY(1px); }
+
+/* Accent primary (heuristic: first button in a horizontal group) */
+.empathy-agent-page .stButton button:first-child { background: var(--cd-accent)!important; color:#fff!important; border-color: var(--cd-accent)!important; }
+.empathy-agent-page .stButton button:first-child:hover { background: var(--cd-accent-hover)!important; }
+.empathy-agent-page .stButton button:first-child:active { background: var(--cd-accent-active)!important; }
+
+/* Focus styles */
+.empathy-agent-page button:focus-visible { outline:2px solid var(--cd-focus-ring)!important; outline-offset:2px; }
+
+/* Success + info message blocks (Streamlit uses .stAlert) */
+.empathy-agent-page .stAlert { border-radius: var(--cd-radius); box-shadow: var(--cd-shadow-sm); }
+.empathy-agent-page .stAlert [data-baseweb="tag"] { border-radius: var(--cd-radius-pill); }
+
+/* Data / code blocks */
+.empathy-agent-page pre, .empathy-agent-page code { font-size: 0.875rem; }
+
+/* Scroll reveal hooks */
+.empathy-agent-page [data-reveal] { opacity:0; transform: translateY(18px); transition: opacity var(--cd-transition) 40ms, transform var(--cd-transition) 40ms; }
+.empathy-agent-page [data-reveal].is-visible { opacity:1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .empathy-agent-page [data-reveal] { opacity:1 !important; transform:none !important; transition:none !important; } }
+
+/* Subtle card mimic for grouped content (e.g., MAS demo output) */
+.empathy-agent-page .cd-block { background: var(--cd-surface); border:1px solid var(--cd-border); border-radius: var(--cd-radius); padding: var(--cd-space-5); box-shadow: var(--cd-shadow-sm); }
+
+/* Divider utility */
+.empathy-agent-page .cd-divider { height:1px; background: linear-gradient(to right, rgba(0,0,0,0.06), rgba(0,0,0,0)); margin: var(--cd-space-6) 0; }
+
+/* Utility spacing */
+.empathy-agent-page .mt-6 { margin-top: var(--cd-space-6)!important; }
+.empathy-agent-page .mb-6 { margin-bottom: var(--cd-space-6)!important; }
+
+/* Timeline component */
+.empathy-agent-page .cd-timeline { position: relative; margin: var(--cd-space-4) 0 var(--cd-space-8); padding-left: 1.25rem; }
+.empathy-agent-page .cd-timeline::before { content:""; position: absolute; left: .4rem; top: 0; bottom: 0; width:2px; background: linear-gradient(to bottom, var(--cd-timeline-line), rgba(226,232,240,0)); }
+.empathy-agent-page .cd-t-item { position: relative; margin-bottom: var(--cd-space-4); }
+.empathy-agent-page .cd-t-item:last-child { margin-bottom: 0; }
+.empathy-agent-page .cd-t-icon { position: absolute; left: -0.25rem; top: 0; width: 1rem; height:1rem; background: var(--cd-timeline-bg); border:2px solid var(--cd-timeline-dot); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.55rem; color: var(--cd-timeline-dot); box-shadow: var(--cd-timeline-shadow); }
+.empathy-agent-page .cd-t-item.ok .cd-t-icon { border-color: var(--cd-success); color: var(--cd-success); }
+.empathy-agent-page .cd-t-item.err .cd-t-icon { border-color: #b91c1c; color:#b91c1c; }
+.empathy-agent-page .cd-t-item.na .cd-t-icon { border-color: #374151; color:#374151; }
+.empathy-agent-page .cd-t-card { margin-left: .75rem; background: var(--cd-timeline-bg); border:1px solid var(--cd-border); border-radius: var(--cd-radius); padding: .5rem .75rem .6rem; box-shadow: var(--cd-shadow-sm); }
+.empathy-agent-page .cd-t-item.err .cd-t-card { border-color:#b91c1c; background: #fef2f2; }
+.empathy-agent-page .cd-t-item.ok .cd-t-card { border-color: var(--cd-success); background: var(--cd-success-bg); }
+.empathy-agent-page .cd-t-meta { font-size: 0.65rem; letter-spacing: .5px; text-transform: uppercase; color: var(--cd-text-muted); margin-bottom: .15rem; display:flex; gap:.5rem; flex-wrap:wrap; }
+.empathy-agent-page .cd-badge { display:inline-block; padding: 2px 6px; font-size: 0.6rem; background: var(--cd-surface-alt); border-radius: var(--cd-radius-pill); color: var(--cd-text-secondary); letter-spacing:.5px; }
+.empathy-agent-page .cd-badge.ok { background: #0c5132; color: #d1fae5; }
+.empathy-agent-page .cd-badge.err { background: #6b0d12; color: #fee2e2; }
+.empathy-agent-page .cd-badge.na { background: #374151; color: #f3f4f6; }
+.empathy-agent-page .cd-badge.anomaly { background:#b91c1c; color:#fee2e2; box-shadow:0 0 0 1px #fee2e2 inset; }
+.empathy-agent-page .cd-t-content { font-size: 0.8rem; line-height: 1.15rem; color: var(--cd-text); white-space: pre-wrap; }
+.empathy-agent-page .cd-t-summary { font-family: monospace; font-size: 0.7rem; color: var(--cd-text-secondary); margin-top: .35rem; word-break: break-word; }
+.empathy-agent-page .cd-t-item:hover .cd-t-card { border-color: var(--cd-border-strong); }
+
+/* Connector accent for improved visual guidance on hover */
+.empathy-agent-page .cd-t-item:hover ~ .cd-t-item .cd-t-icon { filter: brightness(0.95); }
+
+/* Metric grid utility */
+.empathy-agent-page .cd-metric-grid { display:grid; gap: var(--cd-space-4); grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); margin: var(--cd-space-4) 0 var(--cd-space-6); }
+.empathy-agent-page .cd-metric { background: var(--cd-surface); border:1px solid var(--cd-border); border-radius: var(--cd-radius); padding: var(--cd-space-3) var(--cd-space-4); box-shadow: var(--cd-shadow-sm); }
+.empathy-agent-page .cd-metric h4 { margin:0 0 2px; font-size: .65rem; letter-spacing:.5px; text-transform:uppercase; color: var(--cd-text-muted); }
+.empathy-agent-page .cd-metric .val { font-size:1.15rem; font-weight:600; letter-spacing:-0.5px; }
+.empathy-agent-page .cd-metric.anomaly { border-color:#b91c1c; background:#fef2f2; }
+
+/* Simple sparkline */
+.empathy-agent-page .cd-sparkline { display:flex; align-items:flex-end; gap:2px; height:38px; }
+.empathy-agent-page .cd-sparkline span { flex:1; background:linear-gradient(to top, var(--cd-accent), var(--cd-accent-hover)); border-radius:2px 2px 0 0; transition:opacity var(--cd-transition-fast); opacity:.75; }
+.empathy-agent-page .cd-sparkline span[data-a='1'] { background:linear-gradient(to top,#b91c1c,#dc2626); opacity:.9; }
+.empathy-agent-page .cd-sparkline span:hover { opacity:1; }
+
+/* Pain scale legend */
+.empathy-agent-page .cd-pain-scale-wrapper { margin: var(--cd-space-4) 0 var(--cd-space-2); }
+.empathy-agent-page .cd-pain-scale { height:10px; border-radius:6px; background: linear-gradient(90deg,#1D976C 0%, #F6D365 50%, #b91c1c 100%); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); }
+

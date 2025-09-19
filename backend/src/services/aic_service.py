@@ -3,6 +3,10 @@ from __future__ import annotations
 import importlib
 from typing import Any
 
+from backend.src.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 
 def generate_summary(patient_id: str) -> str:
     # Minimal usage to avoid unused variable warnings
@@ -53,4 +57,11 @@ def generate_structured_report(patient_id: str, data: dict[str, Any] | None = No
             "Considerar ejercicios de movilidad suave por la mañana.",
         ],
     }
+    logger.debug(
+        "structured_report patient=%s patterns=%d trend=%s risk=%d",
+        patient_id,
+        len(patterns),
+        trend,
+        len(risk),
+    )
     return report

@@ -7,6 +7,10 @@ from json import loads as json_loads
 from typing import Any
 from urllib.parse import urljoin
 
+from backend.src.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 
 @dataclass(frozen=True)
 class CrossmintConfig:
@@ -56,6 +60,7 @@ class CrossmintClient:
             address = data.get("address") or data.get("wallet") or data.get("id")
             if not address:
                 address = f"CM{self._det_hash('w:'+user_id, 16)}"
+            logger.debug("crossmint create_wallet network status=%s", resp.status_code)
             return {"address": address}  # noqa: TRY300
         except Exception as e:  # noqa: BLE001
             return {"error": "exception", "message": str(e)[:500]}
@@ -82,6 +87,7 @@ class CrossmintClient:
             data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else json_loads(resp.text)
             token_id = data.get("tokenId") or data.get("token_id") or f"NFT{self._det_hash('t:'+owner_address, 8)}"
             tx = data.get("tx") or data.get("transactionId") or f"CM_TX_{self._det_hash(token_id, 12)}"
+            logger.debug("crossmint mint_nft token=%s status=%s", token_id, resp.status_code)
             return {"token_id": token_id, "mint_tx": tx}  # noqa: TRY300
         except Exception as e:  # noqa: BLE001
             return {"error": "exception", "message": str(e)[:500]}
@@ -105,6 +111,7 @@ class CrossmintClient:
                 return {"error": "http_error", "status": resp.status_code, "text": resp.text[:500]}
             data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else json_loads(resp.text)
             tx = data.get("tx") or data.get("transactionId") or f"CM_TX_{self._det_hash(token_id+to_address, 12)}"
+            logger.debug("crossmint transfer_nft token=%s status=%s", token_id, resp.status_code)
             return {"transfer_tx": tx}  # noqa: TRY300
         except Exception as e:  # noqa: BLE001
             return {"error": "exception", "message": str(e)[:500]}
